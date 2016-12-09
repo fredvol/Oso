@@ -81,6 +81,12 @@ public class Rec_Acc_data extends AppCompatActivity implements SensorEventListen
             return;
         }
 
+        // Update Label
+
+        txtv_accX.setText(Float.toString(event.values[0]));
+        txtv_accY.setText(Float.toString(event.values[1]));
+        txtv_accZ.setText(Float.toString(event.values[2]));
+
 
         Log.i("msensor.tostring",
                 "x = " + Float.toString(event.values[0]) + "\t" +
