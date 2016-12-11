@@ -8,6 +8,8 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -70,8 +72,6 @@ public class Rec_Acc_data extends AppCompatActivity implements SensorEventListen
 
 
     }
-
-
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -152,11 +152,31 @@ public class Rec_Acc_data extends AppCompatActivity implements SensorEventListen
 
 
 
-    // back button
-    public boolean onOptionsItemSelected(MenuItem item){
-        finish();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.rec_acc_data, menu);
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home :
+                finish();
+                return true;
+            case R.id.rec_acc_data_1 :
+                Toast.makeText(this, "item 1", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.rec_acc_data_2 :
+                Toast.makeText(this, "item 2", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.rec_acc_data_3 :
+                Toast.makeText(this, "item 3", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
