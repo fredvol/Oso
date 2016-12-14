@@ -11,20 +11,21 @@ from matplotlib import style
 import numpy as np
 
 style.use('ggplot')
+path="RecACC_20161214193205.txt"
 
-time= np.loadtxt('RecACC_20161210093201.txt',
+time= np.loadtxt(path,
                  delimiter = ',',
                  skiprows=1,
                  usecols = (2,))
-accx= np.loadtxt('RecACC_20161210093201.txt',
+accx= np.loadtxt(path,
                  delimiter = ',',
                  skiprows=1,
                  usecols = (3,))
-accy= np.loadtxt('RecACC_20161210093201.txt',
+accy= np.loadtxt(path,
                  delimiter = ',',
                  skiprows=1,
                  usecols = (4,))
-accz= np.loadtxt('RecACC_20161210093201.txt',
+accz= np.loadtxt(path,
                  delimiter = ',',
                  skiprows=1,
                  usecols = (5,))

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Le premier paramètre est le nom de l'activité actuelle
                 // Le second est le nom de l'activité de destination
-                Intent Start_Rec_acc_data_Activite = new Intent(MainActivity.this, Rec_Acc_data.class);
+                Intent Start_Rec_acc_data_Activite = new Intent(MainActivity.this, RecAccdata.class);
                 // Puis on lance l'intent !
                 startActivity(Start_Rec_acc_data_Activite);
             }

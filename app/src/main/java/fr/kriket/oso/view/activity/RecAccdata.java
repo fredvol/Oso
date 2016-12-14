@@ -28,7 +28,7 @@ import fr.kriket.oso.model.SensorPosition;
 
 import static fr.kriket.oso.tools.GenerateCsv.generateCsvFile;
 
-public class Rec_Acc_data extends AppCompatActivity implements SensorEventListener {
+public class RecAccdata extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mSensorAcc;
