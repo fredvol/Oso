@@ -19,7 +19,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.RecAccdata" />
-        <activity android:name=".view.activity.DebugActivity"></activity>
+        <activity android:name=".view.activity.DebugActivity" />
+        >
+        <service
+            android:name=".TrackService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

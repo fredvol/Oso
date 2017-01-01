@@ -5,22 +5,25 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import fr.kriket.oso.BuildConfig;
 import fr.kriket.oso.R;
+import fr.kriket.oso.TrackService;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    Button  btn_record_Acc_data;
     TextView txtview_about;
+    TextView toggle_track;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,29 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("OSO CORE");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        //Start Mouv Visu
+
+
+        toggle_track.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleTrackclick(v);
+            }
+        });
+        }
+
+    public void toggleTrackclick(View v){
+        if(toggle_track.getText().equals("ON")) {
+            Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(MainActivity.this, TrackService.class);
+            startService(i);
+        }
+        else {
+            Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void About() {
         // Update about text
@@ -60,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         //Create Textview
         txtview_about = (TextView) findViewById(R.id.txtView_about);
 
+        //Create Toggle
+        toggle_track = (ToggleButton) findViewById(R.id.toggleBtn_track);
     }
 
     @Override
