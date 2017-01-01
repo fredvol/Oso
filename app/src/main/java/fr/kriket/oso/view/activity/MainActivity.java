@@ -5,9 +5,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import fr.kriket.oso.BuildConfig;
 import fr.kriket.oso.R;
@@ -30,17 +34,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("OSO CORE");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Start Mouv Visu
-        btn_record_Acc_data.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Le premier paramètre est le nom de l'activité actuelle
-                // Le second est le nom de l'activité de destination
-                Intent Start_Rec_acc_data_Activite = new Intent(MainActivity.this, RecAccdata.class);
-                // Puis on lance l'intent !
-                startActivity(Start_Rec_acc_data_Activite);
-            }
-        });
     }
 
     private void About() {
@@ -64,11 +57,36 @@ public class MainActivity extends AppCompatActivity {
     /// Initialisation
     private void findViewsById() {
 
-        //Create Buttun
-        btn_record_Acc_data = (Button) findViewById(R.id.btn_rec_acc_data);
-
         //Create Textview
         txtview_about = (TextView) findViewById(R.id.txtView_about);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mainmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home :
+                finish();
+                return true;
+            case R.id.main_1 :
+                Toast.makeText(this, "mainMenu_1", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.main_2 :
+                Toast.makeText(this, "mainMenu_2 setting", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.main_3 :
+                Intent Start_Debug_Activite = new Intent(MainActivity.this, DebugActivity.class);
+                startActivity(Start_Debug_Activite);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

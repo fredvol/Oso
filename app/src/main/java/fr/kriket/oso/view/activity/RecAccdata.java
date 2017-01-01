@@ -103,9 +103,7 @@ public class RecAccdata extends AppCompatActivity implements SensorEventListener
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
-
 
 
     public boolean RecordAcc2File(){
