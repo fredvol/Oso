@@ -1,8 +1,12 @@
 package fr.kriket.oso.view.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,25 +14,38 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import fr.kriket.oso.BuildConfig;
 import fr.kriket.oso.R;
-import fr.kriket.oso.TrackService;
+import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
+import fr.kriket.oso.tools.SharedPreference;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
 
     TextView txtview_about;
     TextView toggle_track;
+
+    private Boolean currentlyTracking;
+    private int intervalInMinutes = 1;
+    private AlarmManager alarmManager;
+    private Intent gpsTrackerIntent;
+    private PendingIntent pendingIntent;
+    private SharedPreference sharedPreferences;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = new SharedPreference();
 
         findViewsById();
         About();
@@ -37,9 +54,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("OSO CORE");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Shared Pref
+
+        currentlyTracking = sharedPreferences.getBoolean(this,"currentlyTracking");
+
 
         //Start Mouv Visu
-
 
         toggle_track.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,19 +67,55 @@ public class MainActivity extends AppCompatActivity {
                 toggleTrackclick(v);
             }
         });
-        }
 
-    public void toggleTrackclick(View v){
-        if(toggle_track.getText().equals("ON")) {
-            Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(MainActivity.this, TrackService.class);
-            startService(i);
-        }
-        else {
-            Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
-        }
     }
 
+    public void toggleTrackclick(View v){
+
+
+
+
+        if (currentlyTracking) {
+            cancelAlarmManager();
+            Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
+            currentlyTracking = false;
+            sharedPreferences.save(this,"currentlyTracking",false);
+
+
+        } else {
+            startAlarmManager();
+
+            currentlyTracking = true;
+            Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+            sharedPreferences.save(this,"currentlyTracking",true);
+
+        }
+
+
+    }
+
+    private void startAlarmManager() {
+        Log.d(TAG, "startAlarmManager");
+        Context context = getBaseContext();
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
+
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        SystemClock.elapsedRealtime(),
+        intervalInMinutes * 6000, // 60000 = 1 minute
+        pendingIntent);
+    }
+
+    private void cancelAlarmManager() {
+        Log.d(TAG, "cancelAlarmManager");
+
+        Context context = getBaseContext();
+        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
 
     private void About() {
         // Update about text

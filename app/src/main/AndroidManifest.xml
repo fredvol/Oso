@@ -19,12 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.RecAccdata" />
-        <activity android:name=".view.activity.DebugActivity" />
+        <activity android:name=".view.activity.DebugActivity" /><![CDATA[
         >
-        <service
-            android:name=".TrackService"
-            android:enabled="true"
-            android:exported="true"></service>
+        ]]>
     </application>
 
 </manifest>
