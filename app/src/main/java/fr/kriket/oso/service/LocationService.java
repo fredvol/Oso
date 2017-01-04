@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -21,9 +22,9 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
+        Log.d(TAG, "startTracking" +" onStartCommand " );
+        Toast.makeText(this, "startTracking onStartCommand ", Toast.LENGTH_LONG).show();
             startTracking();
-
 
         return START_NOT_STICKY;
     }
@@ -32,12 +33,15 @@ public class LocationService extends Service {
         Date date = new Date();
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         Log.d(TAG, "startTracking" +" Time: " + dateFormat.format(date));
+        Toast.makeText(this, "startTracking startTracking ", Toast.LENGTH_LONG).show();
 
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(TAG, "startTracking" +" onBind " );
+        Toast.makeText(this, "startTracking onBind ", Toast.LENGTH_LONG).show();
         return null;
     }
 }

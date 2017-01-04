@@ -74,21 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        if(toggle_track.getText().equals("ON")) {
 
-        if (currentlyTracking) {
-            cancelAlarmManager();
-            Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
-            currentlyTracking = false;
-            sharedPreferences.save(this,"currentlyTracking",false);
-
-
-        } else {
             startAlarmManager();
 
             currentlyTracking = true;
             Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
             sharedPreferences.save(this,"currentlyTracking",true);
 
+        } else {
+
+            cancelAlarmManager();
+            Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
+            currentlyTracking = false;
+            sharedPreferences.save(this,"currentlyTracking",false);
         }
 
 
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
         SystemClock.elapsedRealtime(),
-        intervalInMinutes * 6000, // 60000 = 1 minute
+        intervalInMinutes * 60000, // 60000 = 1 minute
         pendingIntent);
     }
 
