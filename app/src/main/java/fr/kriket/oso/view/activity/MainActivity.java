@@ -1,5 +1,6 @@
 package fr.kriket.oso.view.activity;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView txtview_about;
-    TextView toggle_track;
+    ToggleButton toggle_track;
 
     private Boolean currentlyTracking;
     private int intervalInMinutes = 1;
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreference sharedPreferences;
 
 
+    final int LOCATION_PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         About();
         //Format title bar
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("OSO CORE");
+        getSupportActionBar().setTitle("OSO");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Set listener
@@ -68,9 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 toggleTrackclick(v);
             }
         });
-        // Shared Pref
 
-        boolean currentlyTracking = sharedPreferences.getBoolean(this,"currentlyTracking"); // USELESS?
+
 
         // check if alarm exist
         boolean alarmUp = (PendingIntent.getBroadcast(this, 0,
@@ -80,36 +83,41 @@ public class MainActivity extends AppCompatActivity {
         if (alarmUp)
         {
             Log.d(TAG, "Alarm is already active");
+            toggle_track.setChecked(true);
+            showNotif();
         } else {
             Log.d(TAG, "Alarm is NOT active");
+            toggle_track.setChecked(false);
         }
-
-
 
 
     }
 
+    public Boolean checkLocationPermission(){
+        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+ }
+    public void requestLocationPermission(){
+        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, LOCATION_PERMISSION_REQUEST_CODE);
+
+    }
+
+
     public void toggleTrackclick(View v){
 
+        if(toggle_track.isChecked()) {
 
-
-        if(toggle_track.getText().equals("ON")) {
-
-            startAlarmManager();
-
-            currentlyTracking = true;
-            Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
-            sharedPreferences.save(this,"currentlyTracking",true);
+            if (checkLocationPermission()) {
+                startAlarmManager();
+                Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+            } else {
+                requestLocationPermission();
+            }
 
         } else {
 
             cancelAlarmManager();
             Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
-            currentlyTracking = false;
-            sharedPreferences.save(this,"currentlyTracking",false);
         }
-
-
     }
 
 
@@ -131,6 +139,25 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent);
 
 
+        showNotif();
+
+    }
+
+    private void cancelAlarmManager() {
+        Log.d(TAG, "cancelAlarmManager");
+
+        //Clear Alarm
+        Context context = getBaseContext();
+        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+
+        cancelNotif();
+    }
+
+    private void showNotif() {
         // Display Notification
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -149,26 +176,15 @@ public class MainActivity extends AppCompatActivity {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // mNotifID allows you to update the notification later on.
         mNotificationManager.notify(mNotifID, mBuilder.build());
-
-
     }
 
-    private void cancelAlarmManager() {
-        Log.d(TAG, "cancelAlarmManager");
-
-        //Clear Alarm
-        Context context = getBaseContext();
-        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-
+    private void cancelNotif() {
         // Remove Notification
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(mNotifID);
-
     }
+
 
     private void About() {
         // Update about text

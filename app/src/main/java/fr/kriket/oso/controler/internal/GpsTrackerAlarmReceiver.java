@@ -15,7 +15,7 @@ public class GpsTrackerAlarmReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GpsTrackerAlarmReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "received ");
+        //Log.d(TAG, "received ");
         context.startService(new Intent(context, LocationService.class));
     }
 }
