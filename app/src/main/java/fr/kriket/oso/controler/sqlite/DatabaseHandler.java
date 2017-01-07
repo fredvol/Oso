@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String TRACKPT_KEY = "id";
+    public static final String TRACKPT_SESSIONID = "SessionId";
     public static final String TRACKPT_TIMESTAMP = "TimeStamp";
     public static final String TRACKPT_LAT = "Lat";
     public static final String TRACKPT_LONG = "Long";
@@ -29,12 +30,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             "CREATE TABLE " + TRACKPT_TABLE_NAME + " (" +
 
                     TRACKPT_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    TRACKPT_TIMESTAMP +"INTEGER"+
-                    TRACKPT_LAT+"REAL"+
-                    TRACKPT_LONG+"REAL"+
-                    TRACKPT_ALT+"INTEGER"+
-                    TRACKPT_BAT+"INTEGER"+
-                    TRACKPT_NETWORKSTRENGH+"INTEGER"+
+                    TRACKPT_SESSIONID +" TEXT,"+
+                    TRACKPT_TIMESTAMP +" INTEGER,"+
+                    TRACKPT_LAT+" REAL,"+
+                    TRACKPT_LONG+" REAL,"+
+                    TRACKPT_ALT+" INTEGER,"+
+                    TRACKPT_BAT+" INTEGER,"+
+                    TRACKPT_NETWORKSTRENGH+" INTEGER,"+
                     TRACKPT_COMMENT + " TEXT, " +
                     TRACKPT_ISSENT + " INTEGER);";
 

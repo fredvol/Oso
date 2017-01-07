@@ -20,13 +20,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.Random;
+
 import fr.kriket.oso.BuildConfig;
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
+import fr.kriket.oso.service.LocationService;
 import fr.kriket.oso.tools.SharedPreference;
 
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView txtview_about;
     ToggleButton toggle_track;
+    Button bttn_mark_pt;
 
     private Boolean currentlyTracking;
     private int intervalInMinutes = 1;
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +79,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        bttn_mark_pt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mark_Point();
+            }
+        });
 
         // check if alarm exist
-        boolean alarmUp = (PendingIntent.getBroadcast(this, 0,
-                new Intent(this, GpsTrackerAlarmReceiver.class),
-                PendingIntent.FLAG_NO_CREATE) != null);
 
-        if (alarmUp)
+        if (isalarmUp())
         {
             Log.d(TAG, "Alarm is already active");
             toggle_track.setChecked(true);
@@ -90,12 +98,17 @@ public class MainActivity extends AppCompatActivity {
             toggle_track.setChecked(false);
         }
 
+    }
 
+    public Boolean isalarmUp() {
+        return  (PendingIntent.getBroadcast(this, 0,
+                new Intent(this, GpsTrackerAlarmReceiver.class),
+                PendingIntent.FLAG_NO_CREATE) != null);
     }
 
     public Boolean checkLocationPermission(){
         return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
- }
+    }
     public void requestLocationPermission(){
         ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, LOCATION_PERMISSION_REQUEST_CODE);
 
@@ -120,12 +133,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void mark_Point(){
+        Log.d(TAG, "markPoint");
+        if (!isalarmUp())
+        {
+            sharedPreferences.save(this,"SessionId",generatedSessionId());
+        }
 
+        this.startService(new Intent(this, LocationService.class));
+    }
 
     int mNotifID=1;
     private void startAlarmManager() {
 
         Log.d(TAG, "startAlarmManager");
+
+        // Store Idsession
+        sharedPreferences.save(this,"SessionId",generatedSessionId());
 
         // Set up the alarm
         Context context = getBaseContext();
@@ -149,10 +173,9 @@ public class MainActivity extends AppCompatActivity {
         //Clear Alarm
         Context context = getBaseContext();
         Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
-
 
         cancelNotif();
     }
@@ -186,9 +209,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    private String generatedSessionId(){
+
+     return  String.valueOf(rndChar())+
+             String.valueOf(rndChar())+
+             String.valueOf(randInt(0,9))+
+             String.valueOf(randInt(0,9))+
+             String.valueOf(randInt(0,9))+
+             String.valueOf(rndChar())+
+             String.valueOf(rndChar());
+
+    }
+
+    private static char rndChar () {
+        int rnd = (int) (Math.random() * 52); // or use Random or whatever
+        char base = (rnd < 26) ? 'A' : 'a';
+        return (char) (base + rnd % 26);
+
+    }
+
+    /**
+     * Returns a psuedo-random number between min and max, inclusive.
+     * The difference between min and max can be at most
+     * <code>Integer.MAX_VALUE - 1</code>.
+
+     * @param min Minimim value
+     * @param max Maximim value.  Must be greater than min.
+     * @return Integer between min and max, inclusive.
+     * @see java.util.Random#nextInt(int)
+     */
+    public static int randInt(int min, int max) {
+
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+
     private void About() {
         // Update about text
-        PackageInfo pInfo = null;
+        PackageInfo pInfo ;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
@@ -198,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
             String strabout2="Version app: "+ version + "   Version code: "+ verCode +'\n' +"Build Variant : "+ BuildConfig.BUILD_TYPE;
 
             txtview_about.setText(strabout2);
-
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -212,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Create Toggle
         toggle_track = (ToggleButton) findViewById(R.id.toggleBtn_track);
+
+        //Create button
+        bttn_mark_pt = (Button) findViewById(R.id.bttn_mark_pt);
     }
 
     @Override

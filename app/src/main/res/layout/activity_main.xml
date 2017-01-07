@@ -45,4 +45,13 @@
         android:layout_below="@+id/txtView_about"
         android:layout_toEndOf="@+id/textView2" />
 
+    <Button
+        android:text="Mark Point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignEnd="@+id/toggleBtn_track"
+        android:layout_marginTop="12dp"
+        android:id="@+id/bttn_mark_pt" />
+
 </RelativeLayout>

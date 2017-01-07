@@ -10,11 +10,12 @@ public class TrackPoint {
 
     private long RowId;
     private String UserId;
+    private String SessionId;
     private Date DatePrise;
     private long TimeStamp;
-    private float Lat;
-    private float Long;
-    private float Alt;
+    private double Lati;
+    private double Long;
+    private double Alt;
     private int Bat;
     private int NetworkStrength;
     private String Comment;
@@ -24,28 +25,17 @@ public class TrackPoint {
     // CONSTRUCTOR
 
 
-    public TrackPoint(long rowId, String userId, Date datePrise, long timeStamp, float lat, float aLong, float alt, int bat, int networkStrength, String comment, boolean isSent) {
-        RowId = rowId;
-        UserId = userId;
-        DatePrise = datePrise;
+
+
+    public TrackPoint(String sessionId, long timeStamp, Date datePrise, double lat, double aLong, double alt) {
+        SessionId = sessionId;
         TimeStamp = timeStamp;
-        Lat = lat;
+        DatePrise = datePrise;
+        Lati = lat;
         Long = aLong;
         Alt = alt;
-        Bat = bat;
-        NetworkStrength = networkStrength;
-        Comment = comment;
-        this.isSent = isSent;
     }
 
-    public TrackPoint(long timeStamp, float lat, float aLong, float alt, int bat, int networkStrength) {
-        TimeStamp = timeStamp;
-        Lat = lat;
-        Long = aLong;
-        Alt = alt;
-        Bat = bat;
-        NetworkStrength = networkStrength;
-    }
 
     // GETTERS and SETTERS
 
@@ -53,9 +43,11 @@ public class TrackPoint {
         return RowId;
     }
 
-    public void setRowId(long rowId) {
-        RowId = rowId;
-    }
+    public void setRowId(long rowId) {RowId = rowId; }
+
+    public String getSessionId() {return SessionId; }
+
+    public void setSessionId(String sessionId) {SessionId = sessionId;}
 
     public String getUserId() {
         return UserId;
@@ -89,7 +81,7 @@ public class TrackPoint {
         NetworkStrength = networkStrength;
     }
 
-    public float getAlt() {
+    public double getAlt() {
         return Alt;
     }
 
@@ -105,7 +97,7 @@ public class TrackPoint {
         Bat = bat;
     }
 
-    public float getLong() {
+    public double getLong() {
         return Long;
     }
 
@@ -113,12 +105,12 @@ public class TrackPoint {
         Long = aLong;
     }
 
-    public float getLat() {
-        return Lat;
+    public double getLati() {
+        return Lati;
     }
 
-    public void setLat(float lat) {
-        Lat = lat;
+    public void setLati(float lati) {
+        Lati = lati;
     }
 
     public long getTimeStamp() {
@@ -141,9 +133,11 @@ public class TrackPoint {
     public String toString() {
         return "TrackPoint{" +
                 "RowId=" + RowId +
+                ", UserId='" + UserId + '\'' +
+                ", SessionId='" + SessionId + '\'' +
                 ", DatePrise=" + DatePrise +
                 ", TimeStamp=" + TimeStamp +
-                ", Lat=" + Lat +
+                ", Lati=" + Lati +
                 ", Long=" + Long +
                 ", Alt=" + Alt +
                 ", Bat=" + Bat +
