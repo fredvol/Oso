@@ -25,7 +25,20 @@ public class TrackPoint {
     // CONSTRUCTOR
 
 
-
+    public TrackPoint(long rowId, String userId, String sessionId, Date datePrise, long timeStamp, double lati, double aLong, double alt, int bat, int networkStrength, String comment, boolean isSent) {
+        RowId = rowId;
+        UserId = userId;
+        SessionId = sessionId;
+        DatePrise = datePrise;
+        TimeStamp = timeStamp;
+        Lati = lati;
+        Long = aLong;
+        Alt = alt;
+        Bat = bat;
+        NetworkStrength = networkStrength;
+        Comment = comment;
+        this.isSent = isSent;
+    }
 
     public TrackPoint(String sessionId, long timeStamp, Date datePrise, double lat, double aLong, double alt) {
         SessionId = sessionId;

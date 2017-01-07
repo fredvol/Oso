@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         {
             sharedPreferences.save(this,"SessionId",generatedSessionId());
         }
-
+    // TODO: 1/7/17 Able to add a comment
         this.startService(new Intent(this, LocationService.class));
     }
 
@@ -295,7 +294,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.main_1 :
-                Toast.makeText(this, "mainMenu_1", Toast.LENGTH_LONG).show();
+                Intent Start_TrackBook_Activite = new Intent(MainActivity.this, TrackBookActivity.class);
+                startActivity(Start_TrackBook_Activite);
                 return true;
             case R.id.main_2 :
                 Toast.makeText(this, "mainMenu_2 setting", Toast.LENGTH_LONG).show();
