@@ -86,12 +86,15 @@ private List<Track> alltracks= new ArrayList<>();
         Log.d(TAG,"onGetTrackBookSucessalltrack: "+ alltracks);
 
         //Sort  Track from Newest to older
+
+
         Collections.sort(alltracks, new Comparator<Track>() {
 
             public int compare(Track o1, Track o2) {
                 return o2.getFirstDate().compareTo(o1.getFirstDate());
             }
         });
+
 
         // add number of track
         getSupportActionBar().setSubtitle("Number of tracks: "+alltracks.size());
@@ -129,19 +132,24 @@ private List<Track> alltracks= new ArrayList<>();
         List<Track> tracks = new ArrayList<>();
         for (String mID : uniqueSessionID) {
             List<TrackPoint> mtrackPoints=new ArrayList<>();
+
             for (TrackPoint trackPoint: trackPoints) {
                 Log.d(TAG,"trck2point mId="+mID +" tracpt.sessID="+trackPoint.getSessionId());
 
-                try {
-                    if (mID.equals(trackPoint.getSessionId())) {
-                        mtrackPoints.add(trackPoint);
+                if (trackPoint.isValid()) {
+                    try {
+                        if (mID.equals(trackPoint.getSessionId())) {
+                            mtrackPoints.add(trackPoint);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();       // FIXME: 1/9/17  if element is null mID
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();       // FIXME: 1/9/17  if element is null mID
                 }
 
             }
-            tracks.add(new Track(mtrackPoints));
+            if (mtrackPoints.size()>0) {
+                tracks.add(new Track(mtrackPoints));
+            }
 
         }
         return tracks;

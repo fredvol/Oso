@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else {
-
             cancelAlarmManager();
             Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         }
@@ -139,6 +138,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "markPoint");
         if (!isalarmUp())
         {
+            Log.d(TAG,"!isalarmUp()");
+            sharedPreferences.save(this,"SessionId",generatedSessionId());
+        }
+
+        if (sharedPreferences.getValue(this,"SessionId") == null){
+            Log.d(TAG,"SessionId) == null");
             sharedPreferences.save(this,"SessionId",generatedSessionId());
         }
     // TODO: 1/7/17 Able to add a comment
@@ -164,9 +169,7 @@ public class MainActivity extends AppCompatActivity {
         intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
         pendingIntent);
 
-
         showNotif();
-
     }
 
     private void cancelAlarmManager() {
@@ -174,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Remove Idsession
         sharedPreferences.removeValue(this,"SessionId");
-
 
         //Clear Alarm
         Context context = getBaseContext();

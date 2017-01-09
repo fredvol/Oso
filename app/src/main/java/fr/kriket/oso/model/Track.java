@@ -38,10 +38,16 @@ public class Track {
     public Date getFirstDate() {
         return  this.trackPoints.get(0).getDatePrise();
     }
+
     public Date getLastDate() {
-        
         return  this.trackPoints.get(this.trackPoints.size()-1).getDatePrise();
     }
 
+    public boolean isValid() {
+        if(this.trackPoints.size()==0) return false;
+        if (this.getsessionID()== null) return false;
+
+        return true;
+    }
 
 }

@@ -142,6 +142,14 @@ public class TrackPoint {
         DatePrise = datePrise;
     }
 
+    // Method
+    public boolean isValid() {
+        if(this.getSessionId()==null) return false;
+        if ( this.getTimeStamp()==0) return false;
+
+        return true;
+    }
+
     @Override
     public String toString() {
         return "TrackPoint{" +
