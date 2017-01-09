@@ -65,7 +65,7 @@ public class TracksLoader extends ArrayAdapter<Track> {
         viewHolder.NB.setText(String.valueOf(track.getLength()));
         viewHolder.SessionID.setText(track.getsessionID());
         viewHolder.StartDate.setText(formatdNow.format(track.getFirstDate()));
-        viewHolder.EndDate.setText(formatdNow.format(track.getLastate()));
+        viewHolder.EndDate.setText(formatdNow.format(track.getLastDate()));
 
         return convertView;
     }

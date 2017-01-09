@@ -33,7 +33,10 @@ import fr.kriket.oso.service.LocationService;
 import fr.kriket.oso.tools.SharedPreference;
 
 
-// TODO: 1/5/17 Button display  if tracking or not onload 
+// TODO: 1/9/17 remove session Id when stop
+// TODO: 1/9/17 change track name for log name
+// TODO: 1/9/17  check if location is ON
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -168,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void cancelAlarmManager() {
         Log.d(TAG, "cancelAlarmManager");
+
+        // Remove Idsession
+        sharedPreferences.removeValue(this,"SessionId");
+
 
         //Clear Alarm
         Context context = getBaseContext();

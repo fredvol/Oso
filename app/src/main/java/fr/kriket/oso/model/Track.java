@@ -38,7 +38,8 @@ public class Track {
     public Date getFirstDate() {
         return  this.trackPoints.get(0).getDatePrise();
     }
-    public Date getLastate() {
+    public Date getLastDate() {
+        
         return  this.trackPoints.get(this.trackPoints.size()-1).getDatePrise();
     }
 

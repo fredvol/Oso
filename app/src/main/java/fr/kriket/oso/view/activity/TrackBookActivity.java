@@ -85,8 +85,19 @@ private List<Track> alltracks= new ArrayList<>();
         alltracks=Trackpoint2Track(list,ExtractUnikSessionID(list));
         Log.d(TAG,"onGetTrackBookSucessalltrack: "+ alltracks);
 
+        //Sort  Track from Newest to older
+        Collections.sort(alltracks, new Comparator<Track>() {
+
+            public int compare(Track o1, Track o2) {
+                return o2.getFirstDate().compareTo(o1.getFirstDate());
+            }
+        });
+
         // add number of track
         getSupportActionBar().setSubtitle("Number of tracks: "+alltracks.size());
+
+
+
 
         ArrayAdapter<Track> adapter;
         adapter = new TracksLoader(this, alltracks);
@@ -119,9 +130,16 @@ private List<Track> alltracks= new ArrayList<>();
         for (String mID : uniqueSessionID) {
             List<TrackPoint> mtrackPoints=new ArrayList<>();
             for (TrackPoint trackPoint: trackPoints) {
-                if (mID.equals(trackPoint.getSessionId())) {
-                    mtrackPoints.add(trackPoint);
+                Log.d(TAG,"trck2point mId="+mID +" tracpt.sessID="+trackPoint.getSessionId());
+
+                try {
+                    if (mID.equals(trackPoint.getSessionId())) {
+                        mtrackPoints.add(trackPoint);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();       // FIXME: 1/9/17  if element is null mID
                 }
+
             }
             tracks.add(new Track(mtrackPoints));
 
