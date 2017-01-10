@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/lg_clik_track_view"
+        android:title="view"
+        app:showAsAction="never"/>
+    <item android:id="@+id/lg_clik_track_delete"
+        android:title="delete"
+        app:showAsAction="never"/>
+    <item android:id="@+id/lg_clik_track_item3"
+        android:title="item3"
+        app:showAsAction="always"/>
+
+</menu>

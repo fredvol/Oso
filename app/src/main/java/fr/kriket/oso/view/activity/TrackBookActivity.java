@@ -1,12 +1,19 @@
 package fr.kriket.oso.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnCreateContextMenuListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,29 +26,111 @@ import fr.kriket.oso.loader.internal.TracksLoader;
 import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 
-public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{
+public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{ //, OnCreateContextMenuListener {
 
 
     private static final String TAG = "TrackBookActivity";
 
     ListView mListView;
+
 private List<Track> alltracks= new ArrayList<>();
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_book);
 
+
         findViewsById();
+
+        // Register to display the long click context menu
+        registerForContextMenu(mListView);
+
         //Format title bar
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Track Book");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         refreshData();
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i(TAG, "Click");
+                String stringTrack;
+
+                stringTrack= alltracks.get(position).getsessionID();
+
+                // Start activity modif
+
+
+                Log.i(TAG, "Tool Selected: "+stringTrack);
+
+
+
+//                Intent StartTrackDetailActivite = new Intent(this, Track_Detail_visu.class);
+//                StartTrackDetailActivite.putExtra("Track", (Serializable) HistorySpecificTrack);
+//                startActivity(StartTrackDetailActivite);
+
+            }
+
+        });
+
+
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG, "OnLongclickStart");
+                Track trackSelected;
+                trackSelected = alltracks.get(position);
+
+                Log.d(TAG,"long click on track : " +trackSelected);
+
+                String str=mListView.getItemAtPosition(position).toString();
+                Log.d(TAG,"long click on tool : " +str);
+
+
+                return true;
+            }
+        });
     }
+
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        if (v.getId()==R.id.listview_trackbook) {
+//            MenuInflater inflater = getMenuInflater();
+//            inflater.inflate(R.menu.long_click_track_list_menu, menu);
+//        }
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        switch(item.getItemId()) {
+//            case R.id.lg_clik_track_view:
+//                Log.d(TAG,"after menu : add" );
+////                // add stuff here
+//                return true;
+//            case R.id.lg_clik_track_delete:
+//                Log.d(TAG,"after menu : delete" );
+////                // edit stuff here
+//                return true;
+//            case R.id.lg_clik_track_item3:
+//                Log.d(TAG,"after menu : item3" );
+////                // remove stuff here
+//               return true;
+//            default:
+//                return super.onContextItemSelected(item);
+//        }
+//    }
 
 
 
