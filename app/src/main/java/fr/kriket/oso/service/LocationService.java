@@ -40,7 +40,6 @@ import fr.kriket.oso.tools.SharedPreference;
 
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.*;
 
-import static java.security.AccessController.getContext;
 
 /**
  * Created by fred on 1/3/17.

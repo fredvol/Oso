@@ -1,6 +1,9 @@
 package fr.kriket.oso.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,17 +25,22 @@ import java.util.HashSet;
 import java.util.List;
 
 import fr.kriket.oso.R;
+import fr.kriket.oso.controler.sqlite.DatabaseHandler;
 import fr.kriket.oso.loader.internal.GetTrackBookLoader;
 import fr.kriket.oso.loader.internal.TracksLoader;
 import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 
-public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{ //, OnCreateContextMenuListener {
+import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TABLE_NAME;
+
+public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{
 
 
     private static final String TAG = "TrackBookActivity";
+    public static final String TRACKPT_SESSIONID = "SessionId";
 
     ListView mListView;
+    Context mcontext =this;
 
 private List<Track> alltracks= new ArrayList<>();
 
@@ -82,55 +91,81 @@ private List<Track> alltracks= new ArrayList<>();
         });
 
 
-
-        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, "OnLongclickStart");
-                Track trackSelected;
-                trackSelected = alltracks.get(position);
-
-                Log.d(TAG,"long click on track : " +trackSelected);
-
-                String str=mListView.getItemAtPosition(position).toString();
-                Log.d(TAG,"long click on tool : " +str);
-
-
-                return true;
-            }
-        });
+//
+//        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.i(TAG, "OnLongclickStart");
+//                Track trackSelected;
+//                trackSelected = alltracks.get(position);
+//
+//                Log.d(TAG,"long click on track : " +trackSelected);
+//
+//                String str=mListView.getItemAtPosition(position).toString();
+//                Log.d(TAG,"long click on tool : " +str);
+//
+//
+//                return true;
+//            }
+//        });
     }
 
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        if (v.getId()==R.id.listview_trackbook) {
-//            MenuInflater inflater = getMenuInflater();
-//            inflater.inflate(R.menu.long_click_track_list_menu, menu);
-//        }
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//        switch(item.getItemId()) {
-//            case R.id.lg_clik_track_view:
-//                Log.d(TAG,"after menu : add" );
-////                // add stuff here
-//                return true;
-//            case R.id.lg_clik_track_delete:
-//                Log.d(TAG,"after menu : delete" );
-////                // edit stuff here
-//                return true;
-//            case R.id.lg_clik_track_item3:
-//                Log.d(TAG,"after menu : item3" );
-////                // remove stuff here
-//               return true;
-//            default:
-//                return super.onContextItemSelected(item);
-//        }
-//    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.listview_trackbook) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.long_click_track_list_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.lg_clik_track_view:
+                Log.d(TAG,"after menu : view" );
+//                // add stuff here
+                return true;
+            case R.id.lg_clik_track_delete:
+                Log.d(TAG,"after menu : delete" );
+
+                if (deleteTrackinDB(alltracks.get(info.position).getsessionID())){
+
+                    Toast toast = Toast.makeText(mcontext,"Session deleted !",Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(mcontext,"Ooops , An error occur!",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                return true;
+
+            case R.id.lg_clik_track_item3:
+                Log.d(TAG,"after menu : item3" );
+//                // remove stuff here
+               return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private boolean deleteTrackinDB(String sessionID){
+        Log.d(TAG,"Delete session IS : "+sessionID );
+
+        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,1);
+
+
+        final String TRACKPT_TABLE_NAME = "TrackPointTable";
+
+        // Gets the data repository in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        boolean isdelete = db.delete(TRACKPT_TABLE_NAME, TRACKPT_SESSIONID + "='" + sessionID+"'", null) > 0;
+        db.close();
+
+        return isdelete;
+
+    }
 
 
 
@@ -188,9 +223,6 @@ private List<Track> alltracks= new ArrayList<>();
         // add number of track
         getSupportActionBar().setSubtitle("Number of tracks: "+alltracks.size());
 
-
-
-
         ArrayAdapter<Track> adapter;
         adapter = new TracksLoader(this, alltracks);
         mListView.setAdapter(adapter); // remove comment above
@@ -223,14 +255,15 @@ private List<Track> alltracks= new ArrayList<>();
             List<TrackPoint> mtrackPoints=new ArrayList<>();
 
             for (TrackPoint trackPoint: trackPoints) {
-                Log.d(TAG,"trck2point mId="+mID +" tracpt.sessID="+trackPoint.getSessionId());
+                //Log.d(TAG,"trck2point mId="+mID +" tracpt.sessID="+trackPoint.getSessionId());
 
-                if (trackPoint.isValid()) {
+                if (trackPoint.isValid() && mID != null) {
                     try {
                         if (mID.equals(trackPoint.getSessionId())) {
                             mtrackPoints.add(trackPoint);
                         }
                     } catch (Exception e) {
+
                         e.printStackTrace();       // FIXME: 1/9/17  if element is null mID
                     }
                 }
