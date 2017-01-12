@@ -23,11 +23,12 @@
         <activity android:name=".view.activity.RecAccdata" />
         <activity android:name=".view.activity.DebugActivity" />
         >
-        <receiver android:name=".controler.internal.GpsTrackerAlarmReceiver"></receiver>
+        <receiver android:name=".controler.internal.GpsTrackerAlarmReceiver" />
 
-        <service android:name=".service.LocationService"></service>
+        <service android:name=".service.LocationService" />
 
-        <activity android:name=".view.activity.TrackBookActivity"></activity>
+        <activity android:name=".view.activity.TrackBookActivity" />
+        <activity android:name=".view.activity.TrackDetailActivity"></activity>
     </application>
 
 </manifest>
