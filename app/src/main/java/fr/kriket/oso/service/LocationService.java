@@ -100,7 +100,7 @@ public class LocationService extends Service implements LocationListener{
         Location GpsPosition = getLocation();
         if (GpsPosition != null) {
             TrackPoint trackPoint;
-            trackPoint = new TrackPoint(sharedPreferences.getValue(this,"SessionId"),mtimestamp,date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude());
+            trackPoint = new TrackPoint(sharedPreferences.getValue(this,"SessionId"),mtimestamp,date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
             trackPoint.setBat((int) getBatteryLevel());
             trackPoint.setNetworkStrength(getNetworkstrength());
             Log.d(TAG, " GPSTracking : " + trackPoint.toString());
@@ -254,6 +254,7 @@ public class LocationService extends Service implements LocationListener{
         values.put(TRACKPT_LAT, trackPoint.getLati());
         values.put(TRACKPT_LONG, trackPoint.getLong());
         values.put(TRACKPT_ALT, trackPoint.getAlt());
+        values.put(TRACKPT_ACC, trackPoint.getAcc());
         values.put(TRACKPT_BAT, trackPoint.getBat());
         values.put(TRACKPT_NETWORKSTRENGH, trackPoint.getNetworkStrength());
         values.put(TRACKPT_COMMENT, trackPoint.getComment());
@@ -261,6 +262,7 @@ public class LocationService extends Service implements LocationListener{
 
 // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(TRACKPT_TABLE_NAME, null, values);
+
 
         return newRowId;
     }

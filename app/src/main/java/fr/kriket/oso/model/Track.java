@@ -26,6 +26,9 @@ public class Track {
         this.trackPoints = trackPoints;
     }
 
+
+    // Getter and setter
+
     public List<TrackPoint> getTrackPoints() {
         return trackPoints;
     }
@@ -34,7 +37,7 @@ public class Track {
         this.trackPoints = trackPoints;
     }
 
-    public int getLength() {
+    public long getLength() {
         return  this.trackPoints.size();
     }
 
@@ -48,6 +51,22 @@ public class Track {
 
     public Date getLastDate() {
         return  this.trackPoints.get(this.trackPoints.size()-1).getDatePrise();
+    }
+
+    public long getNbSent(){
+        long count = 0;
+        for (TrackPoint Tpt : this.trackPoints  ){
+            if(Tpt.isSent()){
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+
+    public long getDuration() {
+        return  this.trackPoints.get(this.trackPoints.size()-1).getTimeStamp()-this.trackPoints.get(0).getTimeStamp();
     }
 
 

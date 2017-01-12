@@ -17,6 +17,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String TRACKPT_LAT = "Lat";
     public static final String TRACKPT_LONG = "Long";
     public static final String TRACKPT_ALT = "Alt";
+    public static final String TRACKPT_ACC = "Acc";
     public static final String TRACKPT_BAT = "Bat";
     public static final String TRACKPT_NETWORKSTRENGH = "NetworkStrength";
     public static final String TRACKPT_COMMENT = "Comment";
@@ -36,6 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     TRACKPT_LONG+" REAL,"+
                     TRACKPT_ALT+" INTEGER,"+
                     TRACKPT_BAT+" INTEGER,"+
+                    TRACKPT_ACC+" REAL,"+
                     TRACKPT_NETWORKSTRENGH+" INTEGER,"+
                     TRACKPT_COMMENT + " TEXT, " +
                     TRACKPT_ISSENT + " INTEGER);";

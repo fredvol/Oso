@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by fred on 1/1/17.
  */
 
+
 public class TrackPoint {
 
     private long RowId;
@@ -16,6 +17,7 @@ public class TrackPoint {
     private double Lati;
     private double Long;
     private double Alt;
+    private float Acc;
     private int Bat;
     private int NetworkStrength;
     private String Comment;
@@ -40,17 +42,19 @@ public class TrackPoint {
         this.isSent = isSent;
     }
 
-    public TrackPoint(String sessionId, long timeStamp, Date datePrise, double lat, double aLong, double alt) {
+    public TrackPoint(String sessionId, long timeStamp, Date datePrise, double lat, double aLong, double alt, float acc) {
         SessionId = sessionId;
         TimeStamp = timeStamp;
         DatePrise = datePrise;
         Lati = lat;
         Long = aLong;
+        Acc=acc;
         Alt = alt;
     }
 
 
-    // GETTERS and SETTERS
+
+// GETTERS and SETTERS
 
     public long getRowId() {
         return RowId;
@@ -101,6 +105,10 @@ public class TrackPoint {
     public void setAlt(float alt) {
         Alt = alt;
     }
+
+    public float getAcc() { return Acc; }
+
+    public void setAcc(float acc) { Acc = acc; }
 
     public int getBat() {
         return Bat;

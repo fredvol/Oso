@@ -36,6 +36,7 @@ import fr.kriket.oso.tools.SharedPreference;
 // TODO: 1/9/17 remove session Id when stop
 // TODO: 1/9/17 change track name for log name
 // TODO: 1/9/17  check if location is ON
+// TODO: 1/12/17 pause tracking
 
 
 
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (sharedPreferences.getValue(this,"SessionId") == null){
-            Log.d(TAG,"SessionId) == null");
+            Log.d(TAG,"SessionId == null");
             sharedPreferences.save(this,"SessionId",generatedSessionId());
         }
     // TODO: 1/7/17 Able to add a comment
