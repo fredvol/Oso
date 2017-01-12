@@ -8,8 +8,8 @@
     <item android:id="@+id/lg_clik_track_delete"
         android:title="Delete"
         app:showAsAction="never"/>
-    <item android:id="@+id/lg_clik_track_item3"
-        android:title="Item3"
+    <item android:id="@+id/lg_clik_export_igc"
+        android:title="Export IGC"
         app:showAsAction="always"/>
 
 </menu>

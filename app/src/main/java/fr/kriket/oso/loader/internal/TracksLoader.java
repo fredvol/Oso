@@ -15,6 +15,7 @@ import java.util.List;
 
 import fr.kriket.oso.R;
 import fr.kriket.oso.model.Track;
+import fr.kriket.oso.tools.SharedPreference;
 
 /**
  * Created by fred on 1/7/17.
@@ -22,6 +23,8 @@ import fr.kriket.oso.model.Track;
 
 
 public class TracksLoader extends ArrayAdapter<Track> {
+    private SharedPreference sharedPreferences;
+
 
     private Context mContext;
     SimpleDateFormat formatdNow = new SimpleDateFormat("dd/MM/yy' - 'HH:mm");
@@ -56,6 +59,8 @@ public class TracksLoader extends ArrayAdapter<Track> {
 
         }
 
+
+
         //getItem(position) get the item[position] of the List<Track> track
         Track track = getItem(position);
 
@@ -66,6 +71,14 @@ public class TracksLoader extends ArrayAdapter<Track> {
         viewHolder.SessionID.setText(track.getsessionID());
         viewHolder.StartDate.setText(formatdNow.format(track.getFirstDate()));
         viewHolder.EndDate.setText(formatdNow.format(track.getLastDate()));
+
+
+        // color if today
+        if ( track.isActive(mContext)){
+            convertView.setBackgroundColor(Color.argb(120,11,227,51));
+        } else {
+            convertView.setBackgroundColor(Color.argb(25,230,230,230));
+        }
 
         return convertView;
     }

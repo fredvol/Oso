@@ -141,8 +141,8 @@ private List<Track> alltracks= new ArrayList<>();
                 }
                 return true;
 
-            case R.id.lg_clik_track_item3:
-                Log.d(TAG,"after menu : item3" );
+            case R.id.lg_clik_export_igc:
+                Log.d(TAG,"after menu : export Igc" );
 //                // remove stuff here
                return true;
             default:
