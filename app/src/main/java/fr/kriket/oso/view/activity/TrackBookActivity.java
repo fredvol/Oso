@@ -18,9 +18,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,6 +35,8 @@ import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TABLE_NAME;
+import static fr.kriket.oso.tools.ExportIGC.generateIGCFile;
+import static fr.kriket.oso.tools.GenerateCsv.generateCsvFile;
 
 public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{
 
@@ -127,7 +132,13 @@ private List<Track> alltracks= new ArrayList<>();
 
             case R.id.lg_clik_export_igc:
                 Log.d(TAG,"after menu : export Igc" );
-//                // remove stuff here
+                DateFormat dateFormatIGC = new SimpleDateFormat("yyyyMMddHHmmss");
+
+
+                String fileName= dateFormatIGC.format(alltracks.get(info.position).getFirstDate())+".igc";
+               String igcPath= generateIGCFile(this,alltracks.get(info.position),fileName);
+                Toast toast = Toast.makeText(mcontext,"IGC saved !  : " +igcPath,Toast.LENGTH_SHORT);
+                toast.show();
                return true;
             default:
                 return super.onContextItemSelected(item);

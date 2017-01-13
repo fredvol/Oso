@@ -19,13 +19,9 @@ public class TrackDetailActivity extends AppCompatActivity {
 
 
     TextView txtview_nbPoints;
-
     TextView txtview_startDate;
-
     TextView txtview_endDate;
-
     TextView txtview_duration;
-
     TextView txtview_sessionID;
 
     Track track;
@@ -34,7 +30,6 @@ public class TrackDetailActivity extends AppCompatActivity {
      * The Format date.
      */
     SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yy' - 'HH:mm");
-
 
 
     @Override
