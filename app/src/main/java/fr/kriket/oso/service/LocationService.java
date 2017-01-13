@@ -235,9 +235,9 @@ public class LocationService extends Service implements LocationListener{
 
     }
 
-    public long add2DB(TrackPoint trackPoint){
+    public long add2DB(TrackPoint trackPoint) {
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(this,TRACKPT_TABLE_NAME,null,1);
+        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, 1);
 
 
         final String TRACKPT_TABLE_NAME = "TrackPointTable";
@@ -246,7 +246,7 @@ public class LocationService extends Service implements LocationListener{
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        Log.d(TAG,"Db Path"+this.getDatabasePath(mDbHelper.TRACKPT_TABLE_NAME));
+        Log.d(TAG, "Db Path" + this.getDatabasePath(mDbHelper.TRACKPT_TABLE_NAME));
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(TRACKPT_SESSIONID, trackPoint.getSessionId());
@@ -263,6 +263,10 @@ public class LocationService extends Service implements LocationListener{
 // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(TRACKPT_TABLE_NAME, null, values);
 
+        if(newRowId<0){
+            Toast toast = Toast.makeText(mContext, "! Problem  ! Point not store in DB.", Toast.LENGTH_LONG);
+            toast.show();
+        }
 
         return newRowId;
     }

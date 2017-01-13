@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
@@ -20,14 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Random;
 
 import fr.kriket.oso.AboutActivity;
-import fr.kriket.oso.BuildConfig;
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
 import fr.kriket.oso.service.LocationService;
@@ -46,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
 
-    TextView txtview_about;
-    ToggleButton toggle_track;
+    ToggleButton toggle_log;
     Button bttn_mark_pt;
 
     private Boolean currentlyTracking;
@@ -76,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Set listener
-        toggle_track.setOnClickListener(new View.OnClickListener() {
+        toggle_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleTrackclick(v);
@@ -95,11 +91,15 @@ public class MainActivity extends AppCompatActivity {
         if (isalarmUp())
         {
             Log.d(TAG, "Alarm is already active");
-            toggle_track.setChecked(true);
+            toggle_log.setChecked(true);
             showNotif();
         } else {
             Log.d(TAG, "Alarm is NOT active");
-            toggle_track.setChecked(false);
+            toggle_log.setChecked(false);
+            if (sharedPreferences.getValue(this,"SessionId") != null){
+                // Remove Idsession
+                sharedPreferences.removeValue(this,"SessionId");
+            }
         }
 
     }
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void toggleTrackclick(View v){
 
-        if(toggle_track.isChecked()) {
+        if(toggle_log.isChecked()) {
 
             if (checkLocationPermission()) {
                 startAlarmManager();
@@ -260,32 +260,12 @@ public class MainActivity extends AppCompatActivity {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-
-//    private void About() {
-//        // Update about text
-//        PackageInfo pInfo ;
-//        try {
-//            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-//
-//            String version = pInfo.versionName;
-//            int verCode = pInfo.versionCode;
-//
-//            String strabout2="Version app: "+ version + "   Version code: "+ verCode +'\n' +"Build Variant : "+ BuildConfig.BUILD_TYPE;
-//
-//            txtview_about.setText(strabout2);
-//
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
     /// Initialisation
     private void findViewsById() {
 
-        //Create Textview
-       // txtview_about = (TextView) findViewById(R.id.txtView_about);
 
         //Create Toggle
-        toggle_track = (ToggleButton) findViewById(R.id.toggleBtn_track);
+        toggle_log = (ToggleButton) findViewById(R.id.toggleBtn_log);
 
         //Create button
         bttn_mark_pt = (Button) findViewById(R.id.bttn_mark_pt);
