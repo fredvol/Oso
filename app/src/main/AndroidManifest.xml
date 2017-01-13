@@ -28,7 +28,8 @@
         <service android:name=".service.LocationService" />
 
         <activity android:name=".view.activity.TrackBookActivity" />
-        <activity android:name=".view.activity.TrackDetailActivity"></activity>
+        <activity android:name=".view.activity.TrackDetailActivity" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

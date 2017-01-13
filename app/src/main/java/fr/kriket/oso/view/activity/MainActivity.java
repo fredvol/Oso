@@ -26,6 +26,7 @@ import android.widget.ToggleButton;
 
 import java.util.Random;
 
+import fr.kriket.oso.AboutActivity;
 import fr.kriket.oso.BuildConfig;
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = new SharedPreference();
 
         findViewsById();
-        About();
+       // About();
         //Format title bar
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("OSO");
@@ -260,28 +261,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void About() {
-        // Update about text
-        PackageInfo pInfo ;
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-
-            String version = pInfo.versionName;
-            int verCode = pInfo.versionCode;
-
-            String strabout2="Version app: "+ version + "   Version code: "+ verCode +'\n' +"Build Variant : "+ BuildConfig.BUILD_TYPE;
-
-            txtview_about.setText(strabout2);
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void About() {
+//        // Update about text
+//        PackageInfo pInfo ;
+//        try {
+//            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+//
+//            String version = pInfo.versionName;
+//            int verCode = pInfo.versionCode;
+//
+//            String strabout2="Version app: "+ version + "   Version code: "+ verCode +'\n' +"Build Variant : "+ BuildConfig.BUILD_TYPE;
+//
+//            txtview_about.setText(strabout2);
+//
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
     /// Initialisation
     private void findViewsById() {
 
         //Create Textview
-        txtview_about = (TextView) findViewById(R.id.txtView_about);
+       // txtview_about = (TextView) findViewById(R.id.txtView_about);
 
         //Create Toggle
         toggle_track = (ToggleButton) findViewById(R.id.toggleBtn_track);
@@ -313,6 +314,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.main_3 :
                 Intent Start_Debug_Activite = new Intent(MainActivity.this, DebugActivity.class);
                 startActivity(Start_Debug_Activite);
+                return true;
+            case R.id.main_about :
+                Intent Start_about_Activite = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(Start_about_Activite);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

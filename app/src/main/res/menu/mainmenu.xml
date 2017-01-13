@@ -11,5 +11,8 @@
     <item android:id="@+id/main_3"
         android:title="Developer"
         app:showAsAction="never"/>
+    <item android:id="@+id/main_about"
+        android:title="About"
+        app:showAsAction="never"/>
 
 </menu>

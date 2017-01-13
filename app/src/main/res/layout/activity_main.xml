@@ -17,15 +17,6 @@
         android:id="@+id/textView2" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="About"
-        android:id="@+id/txtView_about"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp" />
-
-    <TextView
         android:text="Tracking: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +33,7 @@
         android:id="@+id/toggleBtn_track"
         android:checked="false"
         android:enabled="true"
-        android:layout_below="@+id/txtView_about"
+        android:layout_below="@+id/txtView_About"
         android:layout_toEndOf="@+id/textView2" />
 
     <Button
