@@ -4,7 +4,7 @@
 
     <item android:id="@+id/main_1"
         android:title="Track book"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
     <item android:id="@+id/main_2"
         android:title="Setting"
         app:showAsAction="never"/>

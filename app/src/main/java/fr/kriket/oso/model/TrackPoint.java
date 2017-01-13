@@ -1,5 +1,6 @@
 package fr.kriket.oso.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  */
 
 
-public class TrackPoint {
+public class TrackPoint implements Serializable {
 
     private long RowId;
     private String UserId;
@@ -55,6 +56,9 @@ public class TrackPoint {
 
 
 // GETTERS and SETTERS
+
+
+    public Date getDate(){return new Date(TimeStamp); }
 
     public long getRowId() {
         return RowId;

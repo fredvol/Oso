@@ -2,6 +2,7 @@ package fr.kriket.oso.model;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import fr.kriket.oso.tools.SharedPreference;
 
 
 
-public class Track {
+public class Track implements Serializable {
 
 
 
@@ -46,11 +47,11 @@ public class Track {
     }
 
     public Date getFirstDate() {
-        return  this.trackPoints.get(0).getDatePrise();
+        return  this.trackPoints.get(0).getDate();
     }
 
     public Date getLastDate() {
-        return  this.trackPoints.get(this.trackPoints.size()-1).getDatePrise();
+        return  this.trackPoints.get(this.trackPoints.size()-1).getDate();
     }
 
     public long getNbSent(){

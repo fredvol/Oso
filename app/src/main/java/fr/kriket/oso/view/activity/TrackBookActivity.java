@@ -75,39 +75,23 @@ private List<Track> alltracks= new ArrayList<>();
 
                 stringTrack= alltracks.get(position).getsessionID();
 
+                Track track=alltracks.get(position);
                 // Start activity modif
 
 
-                Log.i(TAG, "Tool Selected: "+stringTrack);
+                Log.i(TAG, "Track Selected: "+stringTrack);
 
 
 
-//                Intent StartTrackDetailActivite = new Intent(this, Track_Detail_visu.class);
-//                StartTrackDetailActivite.putExtra("Track", (Serializable) HistorySpecificTrack);
-//                startActivity(StartTrackDetailActivite);
+                Intent StartTrackDetailActivite = new Intent(mcontext, TrackDetailActivity.class);
+                StartTrackDetailActivite.putExtra("Track", (Serializable) track);
+                startActivity(StartTrackDetailActivite);
+
 
             }
 
         });
 
-
-//
-//        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.i(TAG, "OnLongclickStart");
-//                Track trackSelected;
-//                trackSelected = alltracks.get(position);
-//
-//                Log.d(TAG,"long click on track : " +trackSelected);
-//
-//                String str=mListView.getItemAtPosition(position).toString();
-//                Log.d(TAG,"long click on tool : " +str);
-//
-//
-//                return true;
-//            }
-//        });
     }
 
 
