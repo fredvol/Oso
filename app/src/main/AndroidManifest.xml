@@ -29,7 +29,8 @@
 
         <activity android:name=".view.activity.TrackBookActivity" />
         <activity android:name=".view.activity.TrackDetailActivity" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".view.activity.preferenceActivity" />
+        <activity android:name=".view.activity.AboutActivity" />
     </application>
 
 </manifest>

@@ -79,6 +79,6 @@ public class Track implements Serializable {
     }
 
     public boolean isActive(Context mContex) {
-       return  (mContex.getSharedPreferences("OSO_PREFS",Context.MODE_PRIVATE).getString("SessionId","").equals(this.getsessionID())); // FIXME: 1/12/17     // TODO: 1/12/17 HERE soleve acces shared pref
+       return  (mContex.getSharedPreferences("OSO_PREFS",Context.MODE_PRIVATE).getString("SessionId","").equals(this.getsessionID()));
     }
 }

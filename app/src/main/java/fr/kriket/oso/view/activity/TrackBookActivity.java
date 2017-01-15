@@ -107,8 +107,10 @@ private List<Track> alltracks= new ArrayList<>();
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.long_click_track_list_menu, menu);
         }
+        menu.setHeaderTitle("Track Option:");
     }
 
+    // TODO: 1/15/17 add submenu for export 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();

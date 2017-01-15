@@ -1,4 +1,4 @@
-package fr.kriket.oso;
+package fr.kriket.oso.view.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import fr.kriket.oso.BuildConfig;
+import fr.kriket.oso.R;
 import fr.kriket.oso.view.activity.DebugActivity;
 import fr.kriket.oso.view.activity.MainActivity;
 import fr.kriket.oso.view.activity.TrackBookActivity;

@@ -28,7 +28,6 @@ import android.widget.ToggleButton;
 
 import java.util.Random;
 
-import fr.kriket.oso.AboutActivity;
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
 import fr.kriket.oso.service.LocationService;
@@ -226,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         // Store Idsession
         sharedPreferences.save(this,"SessionId",generatedSessionId());
 
-        CancelRepeatingAlarm(this,true);
+        StartCancelRepeatingAlarm(this,true);
         // Set up the alarm
 
 //        Context context = getBaseContext();
@@ -248,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         // Remove Idsession
         sharedPreferences.removeValue(this,"SessionId");
 
-        CancelRepeatingAlarm(this,false);
+        StartCancelRepeatingAlarm(this,false);
         //Clear Alarm
 //        Context context = getBaseContext();
 //        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
@@ -259,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         cancelNotif();
     }
 
-    static void CancelRepeatingAlarm(Context context, boolean creating) {  // TODO: 1/15/17 to rename
+    static void StartCancelRepeatingAlarm(Context context, boolean creating) {
         //if it already exists, then replace it with this one
         Intent alertIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
         PendingIntent timerAlarmIntent = PendingIntent.getBroadcast(context, 100, alertIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -374,7 +373,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Start_TrackBook_Activite);
                 return true;
             case R.id.main_2 :
-                Toast.makeText(this, "mainMenu_2 setting", Toast.LENGTH_LONG).show();
+
+                Intent Start_Preference_Activite = new Intent(MainActivity.this, preferenceActivity.class);
+                startActivity(Start_Preference_Activite);
+
                 return true;
             case R.id.main_3 :
                 Intent Start_Debug_Activite = new Intent(MainActivity.this, DebugActivity.class);
