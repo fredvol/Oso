@@ -1,7 +1,11 @@
 package fr.kriket.oso.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +26,11 @@ public class DebugActivity extends AppCompatActivity {
 
     private static final String TAG = "DebugActivity";
 
+    private static final int REQUEST_WRITE_STORAGE = 112;
+
+
+
+
     Button  btn_record_Acc_data;
     Button btn_export_DB;
 
@@ -30,8 +39,17 @@ public class DebugActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
+        // Check Permission
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
 
         findViewsById();
+
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        }
 
         //Format title bar
         assert getSupportActionBar() != null;
@@ -102,6 +120,8 @@ public class DebugActivity extends AppCompatActivity {
 
             File path = this.getExternalFilesDir(null);
 
+
+
             if (sd.canWrite()) {
                 String  currentDBPath= "//data//" + "fr.kriket.oso"
                         + "//databases//" + NOM;
@@ -117,7 +137,12 @@ public class DebugActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), backupDB.toString(),
                         Toast.LENGTH_LONG).show();
 
+            } else {
+                Toast.makeText(getBaseContext(), "Can't write on Sd card", Toast.LENGTH_LONG)
+                        .show();
+
             }
+
         } catch (Exception e) {
 
             Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)

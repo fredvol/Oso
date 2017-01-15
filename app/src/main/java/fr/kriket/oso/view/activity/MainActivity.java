@@ -2,9 +2,11 @@ package fr.kriket.oso.view.activity;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
@@ -14,11 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -35,6 +39,7 @@ import fr.kriket.oso.tools.SharedPreference;
 // TODO: 1/9/17 change track name for log name
 // TODO: 1/9/17  check if location is ON
 // TODO: 1/12/17 pause tracking
+// TODO: 1/15/17 add interval setting
 
 
 
@@ -137,22 +142,81 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         }
     }
+    String extraComment=null;
 
-    public void mark_Point(){
+    public void mark_Point() {
         Log.d(TAG, "markPoint");
-        if (!isalarmUp())
-        {
-            Log.d(TAG,"!isalarmUp()");
-            sharedPreferences.save(this,"SessionId",generatedSessionId());
+        if (!isalarmUp()) {
+            Log.d(TAG, "!isalarmUp()");
+            sharedPreferences.save(this, "SessionId", generatedSessionId());
         }
 
-        if (sharedPreferences.getValue(this,"SessionId") == null){
-            Log.d(TAG,"SessionId == null");
-            sharedPreferences.save(this,"SessionId",generatedSessionId());
+        if (sharedPreferences.getValue(this, "SessionId") == null) {
+            Log.d(TAG, "SessionId == null");
+            sharedPreferences.save(this, "SessionId", generatedSessionId());
         }
-    // TODO: 1/7/17 Able to add a comment
-        this.startService(new Intent(this, LocationService.class));
+
+        // remove extrra comment
+
+
+        // Ask for comment
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.prompt_markpoint_comment, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Send",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // get user input and set it to result
+                                // edit text
+                                if(userInput.getText().toString().length()>0){
+                                    lauchMarkPointIntent(userInput.getText().toString());
+                                }else{
+                                    lauchMarkPointIntent(null);
+                                }
+
+
+
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
+
+
+    public void lauchMarkPointIntent(String mextracomment){
+        // Created the intent
+        Intent intentlocat=new Intent(this, LocationService.class);
+
+        intentlocat.putExtra("isMarkPoint",true);
+        intentlocat.putExtra("extraComment",mextracomment);
+        this.startService(intentlocat);
+    }
+
+
+
+
+
 
     int mNotifID=1;
     private void startAlarmManager() {
@@ -195,13 +259,11 @@ public class MainActivity extends AppCompatActivity {
         cancelNotif();
     }
 
-    static void CancelRepeatingAlarm(Context context, boolean creating) {
+    static void CancelRepeatingAlarm(Context context, boolean creating) {  // TODO: 1/15/17 to rename
         //if it already exists, then replace it with this one
         Intent alertIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
         PendingIntent timerAlarmIntent = PendingIntent.getBroadcast(context, 100, alertIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Log.d(TAG, "CancelALarm1:timer intent" + timerAlarmIntent);
-        Log.d(TAG, "CancelALarm1:alarmManager" + alarmManager);
 
         if (creating) {
             // Store Idsession
@@ -210,8 +272,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             timerAlarmIntent.cancel();
             alarmManager.cancel(timerAlarmIntent);
-            Log.d(TAG, "CancelALarmaftercancel:timer intent" + timerAlarmIntent);
-            Log.d(TAG, "CancelALarmaftercancel:alarmManager" + alarmManager);
         }
     }
 

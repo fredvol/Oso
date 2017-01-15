@@ -132,11 +132,11 @@ private List<Track> alltracks= new ArrayList<>();
 
             case R.id.lg_clik_export_igc:
                 Log.d(TAG,"after menu : export Igc" );
-                DateFormat dateFormatIGC = new SimpleDateFormat("yyyyMMddHHmmss");
-
+                DateFormat dateFormatIGC = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss");
 
                 String fileName= dateFormatIGC.format(alltracks.get(info.position).getFirstDate())+".igc";
-               String igcPath= generateIGCFile(this,alltracks.get(info.position),fileName);
+                String igcPath= generateIGCFile(this,alltracks.get(info.position),fileName);
+
                 Toast toast = Toast.makeText(mcontext,"IGC saved !  : " +igcPath,Toast.LENGTH_SHORT);
                 toast.show();
                return true;

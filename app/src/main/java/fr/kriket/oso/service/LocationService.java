@@ -75,6 +75,8 @@ public class LocationService extends Service implements LocationListener{
     private SharedPreference sharedPreferences;
 
 
+    boolean  isMarkPoint;
+    String extraComment;
 
 
 
@@ -82,6 +84,25 @@ public class LocationService extends Service implements LocationListener{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         sharedPreferences = new SharedPreference();
+
+        // Initialize Extras:
+        isMarkPoint =false;
+        extraComment =null;
+        if (intent.getExtras() != null) {
+            Log.d(TAG, "onstartCommand" + "Has intent extras: " + intent.getExtras().toString());
+
+            if (intent.getExtras().containsKey("isMarkPoint")) {
+                isMarkPoint = intent.getExtras().getBoolean("isMarkPoint",false);
+            }
+
+            if (intent.getExtras().containsKey("extraComment")) {
+
+                extraComment = intent.getExtras().getString("extraComment",null);
+                Log.d(TAG, "onstartCommand" + "extraComment: " + extraComment);
+
+            }
+        }
+
 
         Log.d(TAG, "------------------ \n startTracking" + " onStartCommand ");
         Log.d(TAG,"SessionId: "+sharedPreferences.getValue(this,"SessionId"));
@@ -103,10 +124,24 @@ public class LocationService extends Service implements LocationListener{
             trackPoint = new TrackPoint(sharedPreferences.getValue(this,"SessionId"),mtimestamp,date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
             trackPoint.setBat((int) getBatteryLevel());
             trackPoint.setNetworkStrength(getNetworkstrength());
+            trackPoint.setComment(extraComment);
             Log.d(TAG, " GPSTracking : " + trackPoint.toString());
             long rowinserted=add2DB(trackPoint);
 
-            Log.d(TAG, " row added : " + rowinserted);
+
+            if(rowinserted>0){
+                Log.d(TAG, " row added : " + rowinserted);
+                if (isMarkPoint) {
+                    Log.d(TAG, " Markpoint added" );
+
+                    Toast toast = Toast.makeText(mContext, "Mark Point Added !", Toast.LENGTH_LONG);
+                    toast.show();
+
+                }
+            } else {
+                Log.d(TAG, " row NOT added : " + rowinserted);
+            }
+
 
         } else {
             Log.d(TAG, " GPSTracking : NULL " );
@@ -246,7 +281,7 @@ public class LocationService extends Service implements LocationListener{
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        Log.d(TAG, "Db Path" + this.getDatabasePath(mDbHelper.TRACKPT_TABLE_NAME));
+        //Log.d(TAG, "Db Path" + this.getDatabasePath(mDbHelper.TRACKPT_TABLE_NAME));
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(TRACKPT_SESSIONID, trackPoint.getSessionId());
