@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/lg_clik_track_view"
-        android:title="View details"
+        android:title="View Track details"
         app:showAsAction="never"/>
     <item android:id="@+id/lg_clik_track_delete"
-        android:title="Delete"
+        android:title="Delete Track"
         app:showAsAction="never"/>
     <item android:id="@+id/lg_clik_export_igc"
-        android:title="Export IGC"
-        app:showAsAction="always"/>
+        android:title="Export to igc"
+        app:showAsAction="always">
+    </item>
 
 </menu>
