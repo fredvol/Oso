@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Boolean currentlyTracking;
     private int intervalInMinutes = 1;
-    private AlarmManager alarmManager;
+    static  private AlarmManager alarmManager;
     private Intent gpsTrackerIntent;
     private PendingIntent pendingIntent;
     private SharedPreference sharedPreferences;
@@ -105,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Boolean isalarmUp() {
-        return  (PendingIntent.getBroadcast(this, 0,
-                new Intent(this, GpsTrackerAlarmReceiver.class),
-                PendingIntent.FLAG_NO_CREATE) != null);
+        Intent alertIntent = new Intent(this, GpsTrackerAlarmReceiver.class);
+        return (PendingIntent.getBroadcast(this, 100, alertIntent, PendingIntent.FLAG_NO_CREATE)!=null);
+
     }
 
     public Boolean checkLocationPermission(){
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         if(toggle_log.isChecked()) {
 
             if (checkLocationPermission()) {
+
                 startAlarmManager();
                 Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
             } else {
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         } else {
+
             cancelAlarmManager();
             Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         }
@@ -160,16 +162,18 @@ public class MainActivity extends AppCompatActivity {
         // Store Idsession
         sharedPreferences.save(this,"SessionId",generatedSessionId());
 
+        CancelRepeatingAlarm(this,true);
         // Set up the alarm
-        Context context = getBaseContext();
-        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
 
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-        SystemClock.elapsedRealtime(),
-        intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
-        pendingIntent);
+//        Context context = getBaseContext();
+//        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+//        pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
+//
+//        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//        SystemClock.elapsedRealtime(),
+//        intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
+//        pendingIntent);
 
         showNotif();
     }
@@ -180,14 +184,35 @@ public class MainActivity extends AppCompatActivity {
         // Remove Idsession
         sharedPreferences.removeValue(this,"SessionId");
 
+        CancelRepeatingAlarm(this,false);
         //Clear Alarm
-        Context context = getBaseContext();
-        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+//        Context context = getBaseContext();
+//        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.cancel(pendingIntent);
 
         cancelNotif();
+    }
+
+    static void CancelRepeatingAlarm(Context context, boolean creating) {
+        //if it already exists, then replace it with this one
+        Intent alertIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+        PendingIntent timerAlarmIntent = PendingIntent.getBroadcast(context, 100, alertIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Log.d(TAG, "CancelALarm1:timer intent" + timerAlarmIntent);
+        Log.d(TAG, "CancelALarm1:alarmManager" + alarmManager);
+
+        if (creating) {
+            // Store Idsession
+
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1 * 60000, timerAlarmIntent);
+        } else {
+            timerAlarmIntent.cancel();
+            alarmManager.cancel(timerAlarmIntent);
+            Log.d(TAG, "CancelALarmaftercancel:timer intent" + timerAlarmIntent);
+            Log.d(TAG, "CancelALarmaftercancel:alarmManager" + alarmManager);
+        }
     }
 
     private void showNotif() {
@@ -196,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_notif_track_on)
                         .setContentTitle("OSO")
-                        .setContentText("Tracking is ON!")
+                        .setContentText("Logging is ON!")
                         .setAutoCancel(false)
                         .setOngoing(true);
 
