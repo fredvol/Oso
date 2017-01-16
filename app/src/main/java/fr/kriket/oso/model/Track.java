@@ -5,13 +5,12 @@ import android.content.Context;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import android.preference.PreferenceManager;
 
-import fr.kriket.oso.tools.SharedPreference;
 
 /**
  * Created by fred on 1/7/17.
  */
-
 
 
 public class Track implements Serializable {
@@ -79,6 +78,8 @@ public class Track implements Serializable {
     }
 
     public boolean isActive(Context mContex) {
-       return  (mContex.getSharedPreferences("OSO_PREFS",Context.MODE_PRIVATE).getString("SessionId","").equals(this.getsessionID()));
+
+      // return  (mContex.getSharedPreferences("OSO_PREFS",Context.MODE_PRIVATE).getString("SessionId","").equals(this.getsessionID()));
+       return  (PreferenceManager.getDefaultSharedPreferences(mContex).getString("sessionID",null).equals(this.getsessionID()));
     }
 }

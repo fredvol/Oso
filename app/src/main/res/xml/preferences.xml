@@ -20,7 +20,7 @@
     <PreferenceCategory android:title="Log setting">
 
         <fr.kriket.oso.tools.NumberPickerPreference
-            android:key="long_interval"
+            android:key="log_interval"
             android:title="Log interval (min)"
             android:summary="Interval between log points: "
             android:defaultValue="2" />

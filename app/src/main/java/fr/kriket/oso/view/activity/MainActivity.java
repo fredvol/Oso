@@ -8,8 +8,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +33,7 @@ import java.util.Random;
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
 import fr.kriket.oso.service.LocationService;
-import fr.kriket.oso.tools.SharedPreference;
+
 
 
 // TODO: 1/9/17 remove session Id when stop
@@ -55,18 +57,24 @@ public class MainActivity extends AppCompatActivity {
     static  private AlarmManager alarmManager;
     private Intent gpsTrackerIntent;
     private PendingIntent pendingIntent;
-    private SharedPreference sharedPreferences;
 
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
-
+    private SharedPreferences sharedPref ;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = new SharedPreference();
+
+
+        //Other share pref
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        //editor
+
+        editor = sharedPref.edit();
 
         findViewsById();
        // About();
@@ -87,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mark_Point();
+                Log.d(TAG,"shared2 value:"+sharedPref.getInt("log_interval",3));
+
             }
         });
 
@@ -100,15 +110,18 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "Alarm is NOT active");
             toggle_log.setChecked(false);
-            if (sharedPreferences.getValue(this,"SessionId") != null){
+            if (sharedPref.getString("sessionID",null) != null){
                 // Remove Idsession
-                sharedPreferences.removeValue(this,"SessionId");
+                editor.putString("sessionID", null).apply();
+
             }
         }
 
     }
 
     public Boolean isalarmUp() {
+
+
         Intent alertIntent = new Intent(this, GpsTrackerAlarmReceiver.class);
         return (PendingIntent.getBroadcast(this, 100, alertIntent, PendingIntent.FLAG_NO_CREATE)!=null);
 
@@ -141,22 +154,22 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         }
     }
-    String extraComment=null;
 
     public void mark_Point() {
         Log.d(TAG, "markPoint");
+
         if (!isalarmUp()) {
             Log.d(TAG, "!isalarmUp()");
-            sharedPreferences.save(this, "SessionId", generatedSessionId());
+
+            editor.putString("sessionID", generatedSessionId()).apply();
+
         }
 
-        if (sharedPreferences.getValue(this, "SessionId") == null) {
+        if (sharedPref.getString("sessionID",null) == null) {
             Log.d(TAG, "SessionId == null");
-            sharedPreferences.save(this, "SessionId", generatedSessionId());
+
+            editor.putString("sessionID", generatedSessionId()).apply();
         }
-
-        // remove extrra comment
-
 
         // Ask for comment
         LayoutInflater li = LayoutInflater.from(this);
@@ -215,15 +228,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-    int mNotifID=1;
     private void startAlarmManager() {
 
         Log.d(TAG, "startAlarmManager");
 
         // Store Idsession
-        sharedPreferences.save(this,"SessionId",generatedSessionId());
+        editor.putString("sessionID", generatedSessionId()).apply();
 
         StartCancelRepeatingAlarm(this,true);
         // Set up the alarm
@@ -245,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "cancelAlarmManager");
 
         // Remove Idsession
-        sharedPreferences.removeValue(this,"SessionId");
+        editor.putString("sessionID", null).apply();
 
         StartCancelRepeatingAlarm(this,false);
         //Clear Alarm
@@ -274,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    int mNotifID=1;    // Notification ID
     private void showNotif() {
         // Display Notification
         NotificationCompat.Builder mBuilder =
@@ -346,7 +357,6 @@ public class MainActivity extends AppCompatActivity {
 
     /// Initialisation
     private void findViewsById() {
-
 
         //Create Toggle
         toggle_log = (ToggleButton) findViewById(R.id.toggleBtn_log);

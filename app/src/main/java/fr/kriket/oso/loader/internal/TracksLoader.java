@@ -23,7 +23,7 @@ import fr.kriket.oso.tools.SharedPreference;
 
 
 public class TracksLoader extends ArrayAdapter<Track> {
-    private SharedPreference sharedPreferences;
+
 
 
     private Context mContext;

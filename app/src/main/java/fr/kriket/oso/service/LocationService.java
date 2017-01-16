@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
@@ -13,6 +14,7 @@ import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.telephony.CellInfo;
@@ -36,7 +38,7 @@ import java.util.List;
 
 import fr.kriket.oso.controler.sqlite.DatabaseHandler;
 import fr.kriket.oso.model.TrackPoint;
-import fr.kriket.oso.tools.SharedPreference;
+
 
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.*;
 
@@ -72,7 +74,9 @@ public class LocationService extends Service implements LocationListener{
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
-    private SharedPreference sharedPreferences;
+
+    private SharedPreferences sharedPref ;
+
 
 
     boolean  isMarkPoint;
@@ -83,7 +87,8 @@ public class LocationService extends Service implements LocationListener{
     // Intent
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        sharedPreferences = new SharedPreference();
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Initialize Extras:
         isMarkPoint =false;
@@ -105,7 +110,7 @@ public class LocationService extends Service implements LocationListener{
 
 
         Log.d(TAG, "------------------ \n startTracking" + " onStartCommand ");
-        Log.d(TAG,"SessionId: "+sharedPreferences.getValue(this,"SessionId"));
+        Log.d(TAG,"SessionId: "+sharedPref.getString("sessionID",null));
         startTracking();
         return START_NOT_STICKY;
     }
@@ -121,7 +126,7 @@ public class LocationService extends Service implements LocationListener{
         Location GpsPosition = getLocation();
         if (GpsPosition != null) {
             TrackPoint trackPoint;
-            trackPoint = new TrackPoint(sharedPreferences.getValue(this,"SessionId"),mtimestamp,date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
+            trackPoint = new TrackPoint(sharedPref.getString("sessionID",null),mtimestamp,date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
             trackPoint.setBat((int) getBatteryLevel());
             trackPoint.setNetworkStrength(getNetworkstrength());
             trackPoint.setComment(extraComment);

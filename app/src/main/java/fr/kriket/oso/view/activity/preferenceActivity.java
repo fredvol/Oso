@@ -1,11 +1,9 @@
 package fr.kriket.oso.view.activity;
 
-import android.content.Intent;
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import fr.kriket.oso.R;
@@ -38,6 +36,8 @@ public class preferenceActivity extends PreferenceActivity {
 
         }
     }
+
+
 
 
 }
