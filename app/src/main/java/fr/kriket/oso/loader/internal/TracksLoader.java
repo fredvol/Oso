@@ -2,12 +2,10 @@ package fr.kriket.oso.loader.internal;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -15,7 +13,6 @@ import java.util.List;
 
 import fr.kriket.oso.R;
 import fr.kriket.oso.model.Track;
-import fr.kriket.oso.tools.SharedPreference;
 
 /**
  * Created by fred on 1/7/17.
