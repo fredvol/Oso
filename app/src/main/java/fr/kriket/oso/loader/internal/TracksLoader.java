@@ -26,18 +26,15 @@ public class TracksLoader extends ArrayAdapter<Track> {
     private Context mContext;
     SimpleDateFormat formatdNow = new SimpleDateFormat("dd/MM/yy' - 'HH:mm");
 
-    //prise est la liste des models à afficher
+
     public TracksLoader(Context context, List<Track> tracks) {
         super(context, 0, tracks);
         mContext = context;
     }
 
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-
 
 
         if (convertView == null) {
@@ -56,11 +53,8 @@ public class TracksLoader extends ArrayAdapter<Track> {
 
         }
 
-
-
         //getItem(position) get the item[position] of the List<Track> track
         Track track = getItem(position);
-
 
         //populated field
 

@@ -89,4 +89,7 @@ public class NumberPickerPreference extends DialogPreference {
     public int getValue() {
         return this.value;
     }
+    public String getValuestr() {
+        return String.valueOf(this.value);
+    }
 }

@@ -73,8 +73,10 @@ public class MainActivity extends AppCompatActivity {
         //Other share pref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         //editor
-
         editor = sharedPref.edit();
+
+        //Initialise all variable if first start
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         findViewsById();
        // About();

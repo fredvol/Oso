@@ -100,7 +100,7 @@ public class DebugActivity extends AppCompatActivity {
             value = sharedPref.getString("username", "default_value");
             Log.d(TAG,"shared2 value:"+value );
             Log.d(TAG,"shared2 value:"+sharedPref.getInt("log_interval",3));
-            Log.d(TAG,"shared2 value:"+sharedPref.getString("newID",null));
+
             }
         });
 

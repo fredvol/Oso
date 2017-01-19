@@ -4,15 +4,10 @@
 
     <PreferenceCategory android:title="Personal information">
         <EditTextPreference
-            android:title="Your Name"
+            android:title="Your Name (Optional)"
             android:key="username"
             android:summary="Provide your username (optional)" />
 
-        <CheckBoxPreference
-            android:key="unique_id"
-            android:title="Keep unique ID:"
-            android:summary="Not supported yet"
-            />
 
     </PreferenceCategory>
 
@@ -32,7 +27,7 @@
         <fr.kriket.oso.tools.NumberPickerPreference
             android:key="Tracking_interval"
             android:title="Tracking interval (min)"
-            android:summary="Sent position every : : "
+            android:summary="Sent position every : "
             android:defaultValue="10" />
     </PreferenceCategory>
 
