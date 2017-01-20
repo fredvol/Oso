@@ -52,12 +52,6 @@ public class MainActivity extends AppCompatActivity {
     ToggleButton toggle_log;
     Button bttn_mark_pt;
 
-    private Boolean currentlyTracking;
-    private int intervalInMinutes = 1;
-    static  private AlarmManager alarmManager;
-    private Intent gpsTrackerIntent;
-    private PendingIntent pendingIntent;
-
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private SharedPreferences sharedPref ;
@@ -97,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mark_Point();
-                Log.d(TAG,"shared2 value:"+sharedPref.getInt("log_interval",3));
 
             }
         });
@@ -228,16 +221,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private void startAlarmManager() {
 
         Log.d(TAG, "startAlarmManager");
+        Log.d(TAG,"shared2 value:"+sharedPref.getInt("log_interval",3));
 
         // Store Idsession
         editor.putString("sessionID", generatedSessionId()).apply();
 
-        StartCancelRepeatingAlarm(this,true);
+        StartCancelRepeatingAlarm(this,true,sharedPref.getInt("log_interval",3));
         // Set up the alarm
 
 //        Context context = getBaseContext();
@@ -259,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         // Remove Idsession
         editor.putString("sessionID", null).apply();
 
-        StartCancelRepeatingAlarm(this,false);
+        StartCancelRepeatingAlarm(this,false,sharedPref.getInt("log_interval",3));
         //Clear Alarm
 //        Context context = getBaseContext();
 //        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
@@ -270,16 +262,18 @@ public class MainActivity extends AppCompatActivity {
         cancelNotif();
     }
 
-    static void StartCancelRepeatingAlarm(Context context, boolean creating) {
+
+    static void StartCancelRepeatingAlarm(Context context, boolean creating,int logInterval) {
         //if it already exists, then replace it with this one
         Intent alertIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
         PendingIntent timerAlarmIntent = PendingIntent.getBroadcast(context, 100, alertIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Log.d(TAG, "Log interval: "+logInterval);
 
         if (creating) {
             // Store Idsession
 
-            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1 * 60000, timerAlarmIntent);
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), logInterval * 60000, timerAlarmIntent);
         } else {
             timerAlarmIntent.cancel();
             alarmManager.cancel(timerAlarmIntent);
