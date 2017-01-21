@@ -62,14 +62,7 @@ public class LocationService extends Service implements LocationListener{
     boolean canGetLocation = false;
 
     Location location; // Location
-    double latitude; // Latitude
-    double longitude; // Longitude
 
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -163,22 +156,19 @@ public class LocationService extends Service implements LocationListener{
 
     public Location getLocation() {
         try {
-            locationManager = (LocationManager) mContext
-                    .getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
             // Getting GPS status
-            isGPSEnabled = locationManager
-                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
             if (!isGPSEnabled) {
-                showNoGPSAlert();
+                showNoGPSAlert(); // Network manager : http://stackoverflow.com/questions/3145089/what-is-the-simplest-and-most-robust-way-to-get-the-users-current-location-on-a/3145655#3145655
             } else {
                 this.canGetLocation = true;
 
                 if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-//                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, this);
-                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
 
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

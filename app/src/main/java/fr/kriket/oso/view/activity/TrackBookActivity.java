@@ -40,6 +40,7 @@ import static fr.kriket.oso.tools.GenerateCsv.generateCsvFile;
 
 public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{
 
+    // TODO: 1/21/17 Refresh the list on resume.
 
     private static final String TAG = "TrackBookActivity";
     public static final String TRACKPT_SESSIONID = "SessionId";
@@ -98,6 +99,18 @@ private List<Track> alltracks= new ArrayList<>();
         });
 
     }
+
+    @Override
+    protected void onRestart(){   // TODO: 1/21/17 check if it update the value after a while
+        super.onRestart();
+        refreshData();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        refreshData();
+            }
 
 
     @Override
@@ -163,7 +176,6 @@ private List<Track> alltracks= new ArrayList<>();
         return isdelete;
 
     }
-
 
 
 

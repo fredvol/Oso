@@ -80,6 +80,6 @@ public class Track implements Serializable {
     public boolean isActive(Context mContex) {
 
       // return  (mContex.getSharedPreferences("OSO_PREFS",Context.MODE_PRIVATE).getString("SessionId","").equals(this.getsessionID()));
-       return  (PreferenceManager.getDefaultSharedPreferences(mContex).getString("sessionID",null).equals(this.getsessionID()));
+       return  (PreferenceManager.getDefaultSharedPreferences(mContex).getString("sessionID","").equals(this.getsessionID()));
     }
 }
