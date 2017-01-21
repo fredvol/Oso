@@ -102,19 +102,20 @@ public class LocationService extends Service implements LocationListener{
         }
 
 
-        Log.d(TAG, "------------------ \n startTracking" + " onStartCommand ");
+        Log.d(TAG, "------------------ \n startLogging" + " onStartCommand ");
         Log.d(TAG,"SessionId: "+sharedPref.getString("sessionID",null));
-        startTracking();
+        startLogging();
         return START_NOT_STICKY;
     }
 
 
+
     // START TRACKING
-    private void startTracking() {
+    private void startLogging() {
         Date date = new Date();
         long mtimestamp = date.getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss Z");
-        Log.d(TAG, "startTracking" + " Time: " + dateFormat.format(date));
+        Log.d(TAG, "startLogging" + " Time: " + dateFormat.format(date));
 
         Location GpsPosition = getLocation();
         if (GpsPosition != null) {
@@ -149,7 +150,7 @@ public class LocationService extends Service implements LocationListener{
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "startTracking" + " onBind ");
+        Log.d(TAG, "startLogging" + " onBind ");
         return null;
     }
 

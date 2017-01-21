@@ -24,8 +24,10 @@
         <activity android:name=".view.activity.DebugActivity" />
         >
         <receiver android:name=".controler.internal.GpsTrackerAlarmReceiver" />
+        <receiver android:name=".controler.internal.TrackAlarmReceiver" />
 
         <service android:name=".service.LocationService" />
+        <service android:name=".service.TrackService" />
 
         <activity android:name=".view.activity.TrackBookActivity" />
         <activity android:name=".view.activity.TrackDetailActivity" />

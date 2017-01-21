@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -32,15 +33,16 @@ import java.util.Random;
 
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
+import fr.kriket.oso.controler.internal.TrackAlarmReceiver;
 import fr.kriket.oso.service.LocationService;
+import fr.kriket.oso.service.TrackService;
 
 
+// TODO: 1/21/17 set in the manifest all view as portrait
 
-// TODO: 1/9/17 remove session Id when stop
-// TODO: 1/9/17 change track name for log name
 // TODO: 1/9/17  check if location is ON
 // TODO: 1/12/17 pause tracking
-// TODO: 1/15/17 add interval setting
+
 
 
 
@@ -50,7 +52,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     ToggleButton toggle_log;
+    ToggleButton toggle_track;
     Button bttn_mark_pt;
+    Button bttn_send_pt;
+    EditText editText_track_link;
+    ImageButton imageBttn_share;
+
 
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
@@ -83,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
         toggle_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toggleLogclick(v);
+            }
+        });
+
+        toggle_track.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 toggleTrackclick(v);
             }
         });
@@ -95,30 +109,59 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // check if alarm exist
+        bttn_send_pt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send_Point();
 
-        if (isalarmUp())
-        {
-            Log.d(TAG, "Alarm is already active");
+            }
+        });
+
+        // Update the buton log and notification
+        updateLogState();
+
+
+    }
+
+    public void updateLogState() {
+        if (isLogAlarmUp()) {
+            Log.d(TAG, "Alarm Log is already active");
             toggle_log.setChecked(true);
             showNotif();
         } else {
-            Log.d(TAG, "Alarm is NOT active");
+            Log.d(TAG, "Alarm Log is NOT active");
             toggle_log.setChecked(false);
-            if (sharedPref.getString("sessionID",null) != null){
+            cancelNotif();
+            if (sharedPref.getString("sessionID", null) != null) {
                 // Remove Idsession
                 editor.putString("sessionID", null).apply();
 
             }
         }
-
     }
 
-    public Boolean isalarmUp() {
+    public void updateTrackState() {
+        if (isTrackAlarmUp()) {
+            Log.d(TAG, "Alarm  Track is already active");
+            toggle_track.setChecked(true);
 
+        } else {
+            Log.d(TAG, "Alarm track is NOT active");
+            toggle_track.setChecked(false);
+        }
+    }
+
+
+    public Boolean isLogAlarmUp() {
 
         Intent alertIntent = new Intent(this, GpsTrackerAlarmReceiver.class);
         return (PendingIntent.getBroadcast(this, 100, alertIntent, PendingIntent.FLAG_NO_CREATE)!=null);
+
+    }
+    public Boolean isTrackAlarmUp() {
+
+        Intent alertIntentTrack = new Intent(this, TrackAlarmReceiver.class);
+        return (PendingIntent.getBroadcast(this, 101, alertIntentTrack, PendingIntent.FLAG_NO_CREATE)!=null);
 
     }
 
@@ -131,38 +174,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void toggleTrackclick(View v){
+
+    public void toggleLogclick(View v){
 
         if(toggle_log.isChecked()) {
 
             if (checkLocationPermission()) {
 
-                startAlarmManager();
-                Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+                startAlarmManager_LOG();
+                Toast.makeText(MainActivity.this, "Start Logging", Toast.LENGTH_SHORT).show();
             } else {
                 requestLocationPermission();
             }
 
         } else {
 
-            cancelAlarmManager();
-            Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
+            cancelAlarmManager_LOG();
+            Toast.makeText(MainActivity.this, "End Logging", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void toggleTrackclick(View v){
+
+        if(toggle_track.isChecked()) {
+            startAlarmManager_TRACK();
+        } else {
+            cancelAlarmManager_TRACK();
         }
     }
 
     public void mark_Point() {
         Log.d(TAG, "markPoint");
 
-        if (!isalarmUp()) {
+        if (!isLogAlarmUp()) {
             Log.d(TAG, "!isalarmUp()");
-
             editor.putString("sessionID", generatedSessionId()).apply();
-
         }
 
         if (sharedPref.getString("sessionID",null) == null) {
             Log.d(TAG, "SessionId == null");
-
             editor.putString("sessionID", generatedSessionId()).apply();
         }
 
@@ -210,7 +260,6 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
     public void lauchMarkPointIntent(String mextracomment){
         // Created the intent
         Intent intentlocat=new Intent(this, LocationService.class);
@@ -220,16 +269,22 @@ public class MainActivity extends AppCompatActivity {
         this.startService(intentlocat);
     }
 
+    public void send_Point(){
+        // Created the intent
+        Intent intentsend=new Intent(this, TrackService.class);
+        this.startService(intentsend);
+    }
 
-    private void startAlarmManager() {
 
-        Log.d(TAG, "startAlarmManager");
-        Log.d(TAG,"shared2 value:"+sharedPref.getInt("log_interval",3));
+    private void startAlarmManager_LOG() {
+
+        Log.d(TAG, "startAlarmManager_LOG interval :"+sharedPref.getInt("log_interval",3));
 
         // Store Idsession
         editor.putString("sessionID", generatedSessionId()).apply();
 
-        StartCancelRepeatingAlarm(this,true,sharedPref.getInt("log_interval",3));
+        StartCancelRepeatingAlarm_LOG(this,true,sharedPref.getInt("log_interval",3));
+
         // Set up the alarm
 
 //        Context context = getBaseContext();
@@ -245,13 +300,14 @@ public class MainActivity extends AppCompatActivity {
         showNotif();
     }
 
-    private void cancelAlarmManager() {
-        Log.d(TAG, "cancelAlarmManager");
+
+    private void cancelAlarmManager_LOG() {
+        Log.d(TAG, "cancelAlarmManager_log");
 
         // Remove Idsession
         editor.putString("sessionID", null).apply();
 
-        StartCancelRepeatingAlarm(this,false,sharedPref.getInt("log_interval",3));
+        StartCancelRepeatingAlarm_LOG(this,false,sharedPref.getInt("log_interval",3));
         //Clear Alarm
 //        Context context = getBaseContext();
 //        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
@@ -263,23 +319,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    static void StartCancelRepeatingAlarm(Context context, boolean creating,int logInterval) {
+
+    private void startAlarmManager_TRACK() {
+        if (isLogAlarmUp()) { //Check is the looging is on
+            Log.d(TAG, "startAlarmManager_track interval: "+sharedPref.getInt("Tracking_interval",10));
+            Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+            StartCancelRepeatingAlarm_TRACK(this,true,sharedPref.getInt("Tracking_interval",10));
+        } else {
+            Log.d(TAG, "startAlarmManager_track Logging is not active , ABORT ");
+            Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_LONG).show();
+        }
+        updateTrackState();
+
+
+    }
+
+    private void cancelAlarmManager_TRACK() {
+        Log.d(TAG, "cancelAlarmManager_track");
+        Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
+        StartCancelRepeatingAlarm_TRACK(this,false,sharedPref.getInt("Tracking_interval",10));
+
+    }
+
+    static void StartCancelRepeatingAlarm_LOG(Context context, boolean creating, int Interval) {
         //if it already exists, then replace it with this one
         Intent alertIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
         PendingIntent timerAlarmIntent = PendingIntent.getBroadcast(context, 100, alertIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Log.d(TAG, "Log interval: "+logInterval);
+        Log.d(TAG, "Log interval: "+Interval);
 
         if (creating) {
             // Store Idsession
 
-            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), logInterval * 60000, timerAlarmIntent);
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), Interval * 60000, timerAlarmIntent);
         } else {
             timerAlarmIntent.cancel();
             alarmManager.cancel(timerAlarmIntent);
         }
     }
 
+    static void StartCancelRepeatingAlarm_TRACK(Context context, boolean creating, int Interval) {
+        //if it already exists, then replace it with this one
+        Intent alertIntentTrack = new Intent(context, TrackAlarmReceiver.class);
+        PendingIntent timerAlarmIntentTrack = PendingIntent.getBroadcast(context, 101, alertIntentTrack, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManagerTrack = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Log.d(TAG, "track interval: "+Interval);
+
+        if (creating) {
+            // Store Idsession
+
+            alarmManagerTrack.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), Interval * 60000, timerAlarmIntentTrack);
+        } else {
+            timerAlarmIntentTrack.cancel();
+            alarmManagerTrack.cancel(timerAlarmIntentTrack);
+        }
+    }
+
+
+
+    //// Notifcation
     int mNotifID=1;    // Notification ID
     private void showNotif() {
         // Display Notification
@@ -356,9 +454,15 @@ public class MainActivity extends AppCompatActivity {
 
         //Create Toggle
         toggle_log = (ToggleButton) findViewById(R.id.toggleBtn_log);
-
+        toggle_track=(ToggleButton) findViewById(R.id.toggleBtn_track);
         //Create button
         bttn_mark_pt = (Button) findViewById(R.id.bttn_mark_pt);
+        bttn_send_pt=(Button) findViewById(R.id.button_send_track);  //use for debuging
+        //Create Edit text
+        editText_track_link= (EditText) findViewById(R.id.editText_track_link);
+        //Created image button
+        imageBttn_share=(ImageButton) findViewById(R.id.imageBttn_share);
+
     }
 
     @Override
