@@ -45,7 +45,8 @@ public class GetTrackBookLoader extends AsyncTask<Void, Void, List> {
     @Override
     protected List doInBackground(Void... voids) {
         Log.d(TAG,"doInBackground");
-        return mController.getallpoints(mContext);
+        //return mController.getallpoints(mContext);
+        return mController.getPointsBySeesionId(mContext,null);
     }
 
     @Override

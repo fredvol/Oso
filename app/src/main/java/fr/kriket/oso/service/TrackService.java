@@ -32,11 +32,14 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import fr.kriket.oso.controler.sqlite.DatabaseHandler;
 import fr.kriket.oso.loader.external.askTrackingIDLoader;
+import fr.kriket.oso.loader.internal.GetTrackPointFromDBLoader;
+import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_ACC;
@@ -56,7 +59,7 @@ import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TIMESTAMP;
  * Created by fred on 1/3/17.
  */
 
-public class TrackService extends Service {
+public class TrackService extends Service implements GetTrackPointFromDBLoader.GetTrackPointFromDBLoaderListener{
 
     private static final String TAG = "TrackService";
 
@@ -87,11 +90,16 @@ public class TrackService extends Service {
 
         if(hasTrackingID()){
             Log.d(TAG, " trackingID OK: " + sharedPref.getString("trackingID",null));
-
+            startProcedureSending();
         } else {
-            Log.d(TAG, " trackingID NO2");
+            Log.d(TAG, " trackingID NO");
             askTrackingIDLoader askTrackingIDLoader = new askTrackingIDLoader(this);
             askTrackingIDLoader.execute();
+
+            if (hasTrackingID()){
+                startProcedureSending();
+            }
+
 
         }
     }
@@ -99,6 +107,22 @@ public class TrackService extends Service {
     public boolean hasTrackingID(){
         return  sharedPref.getString("trackingID",null) != null;
     }
+
+    public void startProcedureSending(){  //maybe useless
+        Log.d(TAG, " sendpoint");
+        selectTrackpoint2send(sharedPref.getString("sessionID",null));
+    }
+
+    public void selectTrackpoint2send(String sessionId){
+
+        List<TrackPoint> trackPoints= new ArrayList<>();
+        Log.d(TAG, "selectTrackpoint2send for seesionId: "+ sessionId);
+        GetTrackPointFromDBLoader loader = new GetTrackPointFromDBLoader(this, this);
+        loader.execute(sessionId);
+    }
+
+
+
 
     @Nullable
     @Override
@@ -108,7 +132,14 @@ public class TrackService extends Service {
     }
 
 
+    @Override
+    public void onGetTrackPointFromDBLoaderSucess(List s) {
+        Log.d(TAG, "onGGetTrackPointFromDBLoaderSucess" + s);
+    }
 
+    @Override
+    public void onGetTrackPointFromDBLoaderFailed(String s) {
+        Log.d(TAG, "onGetTrackPointFromDBLoaderFailed" + s);
 
-
+    }
 }

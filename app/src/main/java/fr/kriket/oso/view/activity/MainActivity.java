@@ -117,8 +117,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the buton log and notification
         updateLogState();
+        updateTrackState();
+        updateTrackLinkState();
+    }
 
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateLogState();
+        updateTrackState();
+        updateTrackLinkState();
     }
 
     public void updateLogState() {
@@ -133,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
             if (sharedPref.getString("sessionID", null) != null) {
                 // Remove Idsession
                 editor.putString("sessionID", null).apply();
-
             }
         }
     }
@@ -149,26 +156,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void updateTrackLinkState() {
+        if (isTrackAlarmUp()) {
+            if (sharedPref.getString("trackingID", null) != null) {
+                editText_track_link.setText( sharedPref.getString("trackingID", null)); // to add sharedPref.getString("serverURl_viewtrack", null)
+            } else {
+                editText_track_link.setText("Waiting for tracking ID ...");
+            }
+        } else {
+            editText_track_link.setText("Tracking not active");
+        }
+    }
+
 
     public Boolean isLogAlarmUp() {
-
         Intent alertIntent = new Intent(this, GpsTrackerAlarmReceiver.class);
         return (PendingIntent.getBroadcast(this, 100, alertIntent, PendingIntent.FLAG_NO_CREATE)!=null);
-
     }
-    public Boolean isTrackAlarmUp() {
 
+    public Boolean isTrackAlarmUp() {
         Intent alertIntentTrack = new Intent(this, TrackAlarmReceiver.class);
         return (PendingIntent.getBroadcast(this, 101, alertIntentTrack, PendingIntent.FLAG_NO_CREATE)!=null);
-
     }
 
     public Boolean checkLocationPermission(){
         return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
     }
+
     public void requestLocationPermission(){
         ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, LOCATION_PERMISSION_REQUEST_CODE);
-
     }
 
 
@@ -346,8 +362,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Log interval: "+Interval);
 
         if (creating) {
-            // Store Idsession
-
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), Interval * 60000, timerAlarmIntent);
         } else {
             timerAlarmIntent.cancel();

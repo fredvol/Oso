@@ -39,7 +39,13 @@ public class GetTrackBookLoaderController  {
         return INSTANCE;
     }
 
-    public List getallpoints(Context mcontext) {
+
+    /**
+     * @param mcontext
+     * @param sessionID ( if null return all sessionId
+     * @return a List of Trackpoint
+     */
+    public List getPointsBySeesionId(Context mcontext, String sessionID) {
 
         DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,1);
 
@@ -49,8 +55,13 @@ public class GetTrackBookLoaderController  {
         // Gets the data repository in write mode
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String strSQL="select * from " + TRACKPT_TABLE_NAME;
 
-        Cursor cursor = db.rawQuery("select * from " + TRACKPT_TABLE_NAME , null);
+        if (sessionID != null) {
+            strSQL=strSQL+" where SessionId= '" +sessionID+"'";
+        }
+
+        Cursor cursor = db.rawQuery(strSQL , null);
 
 
         List listTrackPoint = new ArrayList<>();
@@ -79,11 +90,6 @@ public class GetTrackBookLoaderController  {
         }
         cursor.close();
 
-
-
-
-
         return listTrackPoint;
     }
-
 }
