@@ -25,7 +25,7 @@ public class askTrackingIDLoader  extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... params) {
-
+            // TODO: 1/22/17 Send user name
             Log.d(TAG,"do in back ground");
             return mController.asktrackinID(mContext);
 

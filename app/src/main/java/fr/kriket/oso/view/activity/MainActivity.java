@@ -115,6 +115,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        imageBttn_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharetrackID();
+                  }
+        });
+
+
+
+
+
         // Update the buton log and notification
         updateLogState();
         updateTrackState();
@@ -416,6 +427,13 @@ public class MainActivity extends AppCompatActivity {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(mNotifID);
     }
+
+    public void sharetrackID(){
+        Intent intentShareText = new Intent(); intentShareText.setAction(Intent.ACTION_SEND);
+        intentShareText.setType("text/plain");
+        intentShareText.putExtra(Intent.EXTRA_TEXT, sharedPref.getString("msg_followme","")+": "+sharedPref.getString("serverURl_viewtrack","")+sharedPref.getString("sessionID","Not avalaible")); // TODO: 1/22/17  change session id to tracking ID 
+        startActivity(Intent.createChooser(intentShareText, "Share via"));
+ }
 
 
     private String generatedSessionId(){

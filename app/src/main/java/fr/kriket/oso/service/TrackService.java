@@ -38,6 +38,7 @@ import java.util.List;
 
 import fr.kriket.oso.controler.sqlite.DatabaseHandler;
 import fr.kriket.oso.loader.external.askTrackingIDLoader;
+import fr.kriket.oso.loader.external.sendTrackPointLoader;
 import fr.kriket.oso.loader.internal.GetTrackPointFromDBLoader;
 import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
@@ -59,7 +60,7 @@ import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TIMESTAMP;
  * Created by fred on 1/3/17.
  */
 
-public class TrackService extends Service implements GetTrackPointFromDBLoader.GetTrackPointFromDBLoaderListener{
+public class TrackService extends Service implements GetTrackPointFromDBLoader.GetTrackPointFromDBLoaderListener ,sendTrackPointLoader.sendTrackPointLoaderListener{
 
     private static final String TAG = "TrackService";
 
@@ -115,7 +116,6 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     public void selectTrackpoint2send(String sessionId){
 
-        List<TrackPoint> trackPoints= new ArrayList<>();
         Log.d(TAG, "selectTrackpoint2send for seesionId: "+ sessionId);
         GetTrackPointFromDBLoader loader = new GetTrackPointFromDBLoader(this, this);
         loader.execute(sessionId);
@@ -135,11 +135,25 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     @Override
     public void onGetTrackPointFromDBLoaderSucess(List s) {
         Log.d(TAG, "onGGetTrackPointFromDBLoaderSucess" + s);
+        Log.d(TAG, "Sending ...");
+        sendTrackPointLoader sendTrackPointLoader = new sendTrackPointLoader(this, this);
+        sendTrackPointLoader.execute(s);
     }
 
     @Override
     public void onGetTrackPointFromDBLoaderFailed(String s) {
         Log.d(TAG, "onGetTrackPointFromDBLoaderFailed" + s);
+
+    }
+
+    @Override
+    public void onsendTrackPointSent(List<String> results) {
+        Log.d(TAG, "onsendTrackPointSent" + results);
+    }
+
+    @Override
+    public void onsendTrackPointFailed() {
+        Log.d(TAG, "onsendTrackPointFailed" );
 
     }
 }

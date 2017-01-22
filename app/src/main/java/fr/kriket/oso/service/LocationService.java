@@ -299,6 +299,7 @@ public class LocationService extends Service implements LocationListener{
             toast.show();
         }
 
+        db.close();
         return newRowId;
     }
 }

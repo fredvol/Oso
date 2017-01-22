@@ -31,6 +31,11 @@
             android:defaultValue="10" />
 
         <EditTextPreference
+            android:title="Text to announce your track"
+            android:key="msg_followme"
+            android:defaultValue="Follow my track on: "/>
+
+        <EditTextPreference
             android:title="URL to see track"
             android:key="serverURl_viewtrack"
             android:defaultValue="http://kriket.hd.free.fr:802/oso_web/?u="/>
@@ -39,6 +44,10 @@
             android:title="Server URL for ID query"
             android:key="serverURl_queryId"
             android:defaultValue="http://kriket.hd.free.fr:802/oso_web/V1/queryId.php"/>
+        <EditTextPreference
+            android:title="URL to send trackpoint"
+            android:key="serverURl_sendpoints"
+            android:defaultValue="http://kriket.hd.free.fr:802/oso_web/V1/add.php"/>
 
     </PreferenceCategory>
 

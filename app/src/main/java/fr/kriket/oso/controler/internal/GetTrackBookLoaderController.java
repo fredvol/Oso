@@ -57,8 +57,8 @@ public class GetTrackBookLoaderController  {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String strSQL="select * from " + TRACKPT_TABLE_NAME;
 
-        if (sessionID != null) {
-            strSQL=strSQL+" where SessionId= '" +sessionID+"'";
+        if (sessionID != null) {   //Means is for send
+            strSQL=strSQL+" where SessionId= '" +sessionID+"' and isSent=0 order by TimeStamp DESC Limit 100 ";
         }
 
         Cursor cursor = db.rawQuery(strSQL , null);
