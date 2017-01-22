@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     ImageButton imageBttn_share;
 
 
-
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private SharedPreferences sharedPref ;
     SharedPreferences.Editor editor;
@@ -68,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         //Other share pref
@@ -276,26 +274,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void startAlarmManager_LOG() {
+    private void startAlarmManager_LOG () {
 
-        Log.d(TAG, "startAlarmManager_LOG interval :"+sharedPref.getInt("log_interval",3));
+        Log.d(TAG, "startAlarmManager_LOG interval :" + sharedPref.getInt("log_interval", 3));
 
         // Store Idsession
         editor.putString("sessionID", generatedSessionId()).apply();
 
-        StartCancelRepeatingAlarm_LOG(this,true,sharedPref.getInt("log_interval",3));
+        StartCancelRepeatingAlarm_LOG(this, true, sharedPref.getInt("log_interval", 3));
 
         // Set up the alarm
 
-//        Context context = getBaseContext();
-//        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
-//        pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
-//
-//        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//        SystemClock.elapsedRealtime(),
-//        intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
-//        pendingIntent);
+    //        Context context = getBaseContext();
+    //        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    //        gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
+    //        pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
+    //
+    //        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+    //        SystemClock.elapsedRealtime(),
+    //        intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
+    //        pendingIntent);
 
         showNotif();
     }
@@ -307,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
         // Remove Idsession
         editor.putString("sessionID", null).apply();
 
-        StartCancelRepeatingAlarm_LOG(this,false,sharedPref.getInt("log_interval",3));
+        StartCancelRepeatingAlarm_LOG(this, false, sharedPref.getInt("log_interval", 3));
         //Clear Alarm
 //        Context context = getBaseContext();
 //        Intent gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
@@ -317,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
         cancelNotif();
     }
+
 
 
 
@@ -330,15 +329,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_LONG).show();
         }
         updateTrackState();
-
-
     }
 
     private void cancelAlarmManager_TRACK() {
         Log.d(TAG, "cancelAlarmManager_track");
+        editor.putString("trackingID", null).apply();
         Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         StartCancelRepeatingAlarm_TRACK(this,false,sharedPref.getInt("Tracking_interval",10));
-
     }
 
     static void StartCancelRepeatingAlarm_LOG(Context context, boolean creating, int Interval) {
@@ -376,7 +373,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //// Notifcation
     int mNotifID=1;    // Notification ID
     private void showNotif() {
@@ -406,7 +402,6 @@ public class MainActivity extends AppCompatActivity {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(mNotifID);
     }
-
 
 
     private String generatedSessionId(){

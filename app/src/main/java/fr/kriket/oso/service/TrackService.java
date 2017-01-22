@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 
 import fr.kriket.oso.controler.sqlite.DatabaseHandler;
+import fr.kriket.oso.loader.external.askTrackingIDLoader;
 import fr.kriket.oso.model.TrackPoint;
 
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_ACC;
@@ -77,6 +78,7 @@ public class TrackService extends Service {
     }
 
 
+
     // START TRACKING
     private void startTracking() {
         Date date = new Date();
@@ -85,8 +87,12 @@ public class TrackService extends Service {
 
         if(hasTrackingID()){
             Log.d(TAG, " trackingID OK: " + sharedPref.getString("trackingID",null));
+
         } else {
-            Log.d(TAG, " trackingID NO");
+            Log.d(TAG, " trackingID NO2");
+            askTrackingIDLoader askTrackingIDLoader = new askTrackingIDLoader(this);
+            askTrackingIDLoader.execute();
+
         }
     }
 

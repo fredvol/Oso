@@ -29,6 +29,12 @@
             android:title="Tracking interval (min)"
             android:summary="Sent position every : "
             android:defaultValue="10" />
+
+        <EditTextPreference
+            android:title="Server URL for ID query"
+            android:key="serverURl_queryId"
+            android:defaultValue="http://kriket.hd.free.fr:802/oso_web/V1/queryId.php"/>
+
     </PreferenceCategory>
 
 
