@@ -6,9 +6,17 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fr.kriket.oso.model.TrackPoint;
@@ -79,8 +87,10 @@ public class sendTrackPointControler {
                 String StrResponse = response.body().string();
                 Log.d(TAG, "StrResponse: " + StrResponse);
                 if (response.isSuccessful()) {
+                    String resultTimestamp = StrResponse.substring(StrResponse.indexOf("[") + 1, StrResponse.indexOf("]"));
+                    List<String> ListTimestamp =  Arrays.asList(resultTimestamp.split(","));
 
-                    return null;
+                    return ListTimestamp;
                 } else {
                     return null;
                 }
@@ -90,6 +100,10 @@ public class sendTrackPointControler {
                 Log.e(TAG, "Execption caught: ", e);
                 return null;
             }
-        }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+    }
 
 }

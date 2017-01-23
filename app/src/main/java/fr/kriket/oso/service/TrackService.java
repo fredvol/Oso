@@ -122,8 +122,6 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     }
 
 
-
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -149,6 +147,9 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     @Override
     public void onsendTrackPointSent(List<String> results) {
         Log.d(TAG, "onsendTrackPointSent" + results);
+        List<Long> listlongtimestamp=new ArrayList<Long>();
+        for(String s : results) listlongtimestamp.add(Long.valueOf(s));
+        Log.d(TAG, "onsendTrackPointSent list Long" + listlongtimestamp);
     }
 
     @Override
