@@ -49,7 +49,6 @@ public class GetTrackBookLoaderController  {
 
         DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,1);
 
-
         final String TRACKPT_TABLE_NAME = "TrackPointTable";
 
         // Gets the data repository in write mode
@@ -62,7 +61,6 @@ public class GetTrackBookLoaderController  {
         }
 
         Cursor cursor = db.rawQuery(strSQL , null);
-
 
         List listTrackPoint = new ArrayList<>();
         while(cursor.moveToNext()) {
@@ -77,14 +75,15 @@ public class GetTrackBookLoaderController  {
             double Long = cursor.getDouble(4);
             double Alt = cursor.getDouble(5);
             int Bat = cursor.getInt(6);
-            int NetworkStrength = cursor.getInt(7);
-            String Comment= cursor.getString(8);
-            boolean isSent= cursor.getInt(8)> 0;
+            float Acc = cursor.getInt(7);
+            int NetworkStrength = cursor.getInt(8);
+
+            String Comment= cursor.getString(9);
+            boolean isSent= cursor.getInt(10)> 0;
 
             Date date = new Date(timeStamp);
 
-
-            TrackPoint trackPoint = new TrackPoint (RowId, UserId, SessionId,date,timeStamp,Lati,Long,Alt,Bat,NetworkStrength,Comment,isSent);
+            TrackPoint trackPoint = new TrackPoint (RowId, UserId, SessionId,date,timeStamp,Lati,Long,Alt,Bat,Acc,NetworkStrength,Comment,isSent);
             Log.d(TAG,"trackPoint"+trackPoint.toString());
             listTrackPoint.add(trackPoint);
         }

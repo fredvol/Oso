@@ -28,7 +28,7 @@ public class TrackPoint implements Serializable {
     // CONSTRUCTOR
 
 
-    public TrackPoint(long rowId, String userId, String sessionId, Date datePrise, long timeStamp, double lati, double aLong, double alt, int bat, int networkStrength, String comment, boolean isSent) {
+    public TrackPoint(long rowId, String userId, String sessionId, Date datePrise, long timeStamp, double lati, double aLong, double alt, int bat,float acc, int networkStrength, String comment, boolean isSent) {
         RowId = rowId;
         UserId = userId;
         SessionId = sessionId;
@@ -38,6 +38,7 @@ public class TrackPoint implements Serializable {
         Long = aLong;
         Alt = alt;
         Bat = bat;
+        Acc=acc;
         NetworkStrength = networkStrength;
         Comment = comment;
         this.isSent = isSent;

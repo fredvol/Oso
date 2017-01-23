@@ -90,7 +90,7 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
         Log.d(TAG, "startTracking" + " Time: " + dateFormat.format(date));
 
         if(hasTrackingID()){
-            Log.d(TAG, " trackingID OK: " + sharedPref.getString("trackingID",null));
+            Log.d(TAG, " trackingID OK: " + sharedPref.getString("sessionID",null));
             startProcedureSending();
         } else {
             Log.d(TAG, " trackingID NO");
@@ -111,7 +111,7 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     public void startProcedureSending(){  //maybe useless
         Log.d(TAG, " sendpoint");
-        selectTrackpoint2send(sharedPref.getString("sessionID",null));
+        selectTrackpoint2send(sharedPref.getString("sessionID",""));
     }
 
     public void selectTrackpoint2send(String sessionId){
@@ -134,7 +134,7 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     @Override
     public void onGetTrackPointFromDBLoaderSucess(List s) {
-        Log.d(TAG, "onGGetTrackPointFromDBLoaderSucess" + s);
+        Log.d(TAG, "onGGetTrackPointFromDBLoaderSucess: " + s);
         Log.d(TAG, "Sending ...");
         sendTrackPointLoader sendTrackPointLoader = new sendTrackPointLoader(this, this);
         sendTrackPointLoader.execute(s);
