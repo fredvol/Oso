@@ -27,7 +27,6 @@ public class MyPreferenceFragment extends PreferenceFragment implements SharedPr
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
             pickPreferenceObject(getPreferenceScreen().getPreference(i));
         }
-
     }
 
 

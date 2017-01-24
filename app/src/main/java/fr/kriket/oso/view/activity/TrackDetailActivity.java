@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import javax.xml.datatype.Duration;
 
 import fr.kriket.oso.R;
 import fr.kriket.oso.model.Track;
+import fr.kriket.oso.tools.GpsTools;
 
 
 public class TrackDetailActivity extends AppCompatActivity {
@@ -23,6 +26,9 @@ public class TrackDetailActivity extends AppCompatActivity {
     TextView txtview_endDate;
     TextView txtview_duration;
     TextView txtview_sessionID;
+
+    TextView txtview_distCurvi;
+    TextView txtview_distLinear;
 
     Track track;
 
@@ -52,12 +58,16 @@ public class TrackDetailActivity extends AppCompatActivity {
     /// Initialisation
     private void displayData() {
 
+        NumberFormat formatter = new DecimalFormat("0.000");
 
-         txtview_nbPoints.setText(track.getNbSent()+"/"+track.getLength());
-         txtview_startDate.setText(formatDate.format(track.getFirstDate()));
-         txtview_endDate.setText(formatDate.format(track.getLastDate()));
-         txtview_duration.setText(formatSeconds(track.getDuration()));
-         txtview_sessionID.setText(track.getsessionID());
+
+        txtview_nbPoints.setText(track.getNbSent()+"/"+track.getLength());
+        txtview_startDate.setText(formatDate.format(track.getFirstDate()));
+        txtview_endDate.setText(formatDate.format(track.getLastDate()));
+        txtview_duration.setText(formatSeconds(track.getDuration()));
+        txtview_sessionID.setText(track.getsessionID());
+        txtview_distLinear.setText( String.valueOf(formatter.format(GpsTools.distLineTrack(track)/1000)));
+        txtview_distCurvi.setText(String.valueOf(formatter.format(GpsTools.distCurviTrack(track)/1000)));
 
     }
 
@@ -105,6 +115,8 @@ public class TrackDetailActivity extends AppCompatActivity {
         txtview_endDate= (TextView) findViewById(R.id.textView_endDate);
         txtview_duration = (TextView) findViewById(R.id.textView_duration);
         txtview_sessionID= (TextView) findViewById(R.id.textView_sessionId);
+        txtview_distCurvi= (TextView) findViewById(R.id.textView_dist);
+        txtview_distLinear= (TextView) findViewById(R.id.textView_dist_lin);
 
     }
 

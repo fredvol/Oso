@@ -9,7 +9,7 @@ import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 
 public class GpsTools {
-    public double gps2m(double lat_a, double lng_a, double lat_b, double lng_b) {
+    public static double gps2m(double lat_a, double lng_a, double lat_b, double lng_b) {
         double pk = (180/3.14169);
 
         double a1 = lat_a / pk;
@@ -25,18 +25,18 @@ public class GpsTools {
         return 6366000*tt;
     }
 
-    public double dist2pt(TrackPoint Tpt1 ,TrackPoint Tpt2){
+    public static double dist2pt(TrackPoint Tpt1 ,TrackPoint Tpt2){
         return gps2m(Tpt1.getLati(),Tpt1.getLong(),Tpt2.getLati(),Tpt2.getLong());
     }
 
-    public double distLineTrack(Track track) {
+    public static double distLineTrack(Track track) {
         return dist2pt(track.getTrackPoints().get(0),track.getTrackPoints().get(track.getTrackPoints().size()-1));
     }
 
-    public double distCurviTrack(Track track) {
+    public static double distCurviTrack(Track track) {
         double disttotal=0;
-        int i;
-        for(i=1;i>track.getTrackPoints().size()-1 ;i++) {
+
+        for(int i=1;i<track.getTrackPoints().size()-1 ;i++) {
             double dist =dist2pt(track.getTrackPoints().get(i-1),track.getTrackPoints().get(i));
             if (dist>track.getTrackPoints().get(i-1).getAcc()){
                 disttotal=disttotal+dist;

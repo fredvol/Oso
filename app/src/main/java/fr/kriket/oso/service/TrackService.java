@@ -133,9 +133,15 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     @Override
     public void onGetTrackPointFromDBLoaderSucess(List s) {
         Log.d(TAG, "onGGetTrackPointFromDBLoaderSucess: " + s);
-        Log.d(TAG, "Sending ...");
-        sendTrackPointLoader sendTrackPointLoader = new sendTrackPointLoader(this, this);
-        sendTrackPointLoader.execute(s);
+
+        if(s.size()>0){
+            Log.d(TAG, "s.size()>0  Sending ...");
+            sendTrackPointLoader sendTrackPointLoader = new sendTrackPointLoader(this, this);
+            sendTrackPointLoader.execute(s);
+        } else {
+            Log.d(TAG, "No points to send");
+        }
+
     }
 
     @Override
@@ -146,8 +152,11 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     @Override
     public void onsendTrackPointSent(List<String> results) {
-        Log.d(TAG, "onsendTrackPointSent" + results);
-        updateIsSent2DB(results);
+        Log.d(TAG, "onsendTrackPointSent:" + results);
+        if(results.size()>0){
+            updateIsSent2DB(results);
+        }
+
     }
 
     @Override
