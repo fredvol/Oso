@@ -87,7 +87,7 @@ public class sendTrackPointControler {
                 String StrResponse = response.body().string();
                 Log.d(TAG, "StrResponse: " + StrResponse);
                 if (response.isSuccessful()) {
-                    String resultTimestamp = StrResponse.substring(StrResponse.indexOf("[") + 1, StrResponse.indexOf("]"));
+                    String resultTimestamp = StrResponse.substring(StrResponse.indexOf("[") + 1, StrResponse.indexOf("]")); // TODO: 1/23/17 can be nicer using json format
                     List<String> ListTimestamp =  Arrays.asList(resultTimestamp.split(","));
 
                     return ListTimestamp;
