@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateTrackLinkState() {
         if (isTrackAlarmUp()) {
             if (sharedPref.getString("trackingID", null) != null) {
-                editText_track_link.setText( sharedPref.getString("trackingID", null)); // to add sharedPref.getString("serverURl_viewtrack", null)
+                editText_track_link.setText( sharedPref.getString("sessionID", null)); // to add sharedPref.getString("serverURl_viewtrack", null)
             } else {
                 editText_track_link.setText("Waiting for tracking ID ...");
             }
@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
     public void requestLocationPermission(){
         ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, LOCATION_PERMISSION_REQUEST_CODE);
     }
-
 
 
     public void toggleLogclick(View v){

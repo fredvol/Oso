@@ -70,6 +70,12 @@ public class MyPreferenceFragment extends PreferenceFragment implements SharedPr
             Preference pref =  findPreference(key);
             pref.setSummary("every: "+sharedPreferences.getInt(key,3)+ " min");    // FIXME: 1/19/17 the default value 3 should not be the same for log and track (display default value)
         }
+
+        if (key.equals("msg_followme") || key.equals("serverURl_viewtrack") || key.equals("serverURl_queryId") || key.equals("serverURl_sendpoints"))  {
+            Preference pref =  findPreference(key);
+            pref.setSummary(sharedPreferences.getString(key,null));
+        }
+
     }
 
     @Override

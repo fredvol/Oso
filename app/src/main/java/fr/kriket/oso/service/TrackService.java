@@ -147,14 +147,49 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     @Override
     public void onsendTrackPointSent(List<String> results) {
         Log.d(TAG, "onsendTrackPointSent" + results);
-        List<Long> listlongtimestamp=new ArrayList<Long>();
-        for(String s : results) listlongtimestamp.add(Long.valueOf(s));
-        Log.d(TAG, "onsendTrackPointSent list Long" + listlongtimestamp);
+        updateIsSent2DB(results);
     }
 
     @Override
     public void onsendTrackPointFailed() {
         Log.d(TAG, "onsendTrackPointFailed" );
+
+    }
+
+    public boolean updateIsSent2DB(List<String> listTimestamp) {
+
+        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, 1);
+
+        final String TRACKPT_TABLE_NAME = "TrackPointTable";
+
+        // Gets the data repository in write mode
+        ContentValues cv = new ContentValues();
+        cv.put(TRACKPT_ISSENT,1);
+
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+
+        List<Long> modifiedRow= new ArrayList<>();
+
+        for(String s : listTimestamp) {
+            long modifRowId=db.update(TRACKPT_TABLE_NAME, cv,TRACKPT_TIMESTAMP+"="+s, null);
+
+            if(modifRowId>0){
+                modifiedRow.add(modifRowId);
+            }
+        }
+        db.close();
+                Log.d(TAG, "updateIsSent2DB" + modifiedRow);
+        if(modifiedRow.size()==listTimestamp.size()){
+                     return true;
+        } else {
+            Toast toast = Toast.makeText(mContext, "! Problem  ! Point not updated in DB.", Toast.LENGTH_LONG);
+            toast.show();
+            return false;
+        }
+
+
 
     }
 }
