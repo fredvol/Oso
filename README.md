@@ -1,12 +1,13 @@
 # Oso
 
-This is a light, anonymous ,amnesic, safety tracking.
+This is : a light, anonymous ,amnesic, personal, safety tracking.
 
 The aim is to have an app which :
 - is battery restpectfull: the less power it need the better. 
 - is loginless: I do not like to have to create an account on every service I use. So this one in design to be donwload and play!
 - is anynonymous: when you enable the tracking , the server give you a random ID, which will change on your new track.
 - is amnesic: The tracks will be remove from the server after X (need to be define) days.
+- is personal : you share the "follow me" link to  the person you want.
 - is privacy respectfull: No private or usage data  are store or send. Just the trackpoints ( can be redirect to your own server)
 - no ads no analytics stuff :  light , simple and privacy respectfull we said  !  
 
@@ -31,13 +32,14 @@ A service  able to send sms  to people if your phone is suspiciously still.
 
 
 ## Server side
-All data are sent to a server, which is also opensource:  https://github.com/fredvol/OsoWeb
+All data are sent to a server, which is also opensource ( you can install  your own one):  https://github.com/fredvol/OsoWeb
 
 
 ##License:
 Still to be define but should be GPL V3. Anyway something open pushing for code sharing.
 
 WORK IN SLOW PROGRESS ....
+Any comments are welcome.
 
 ## Coding details:
 Started with Android studio 2.2.3
