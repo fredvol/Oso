@@ -101,7 +101,6 @@ public class LocationService extends Service implements LocationListener{
             }
         }
 
-
         Log.d(TAG, "------------------ \n startLogging" + " onStartCommand ");
         Log.d(TAG,"SessionId: "+sharedPref.getString("sessionID",null));
         startLogging();
@@ -112,22 +111,63 @@ public class LocationService extends Service implements LocationListener{
 
     // START TRACKING
     private void startLogging() {
-        Date date = new Date();
-        long mtimestamp = date.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss Z");
-        Log.d(TAG, "startLogging" + " Time: " + dateFormat.format(date));
 
-        Location GpsPosition = getLocation();
-        if (GpsPosition != null) {
+        try {
+            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+
+            // Getting GPS status
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            if (!isGPSEnabled) {
+                showNoGPSAlert(); // Network manager : http://stackoverflow.com/questions/3145089/what-is-the-simplest-and-most-robust-way-to-get-the-users-current-location-on-a/3145655#3145655
+            } else {
+                this.canGetLocation = true;
+
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "startLogging" + " resquest location update ");
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);  // request location update
+                    // TODO: 1/30/17 check for passive position ( for battery)  ?
+                }
+
+            }
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.d(TAG, "startLogging" + " onBind ");
+        return null;
+    }
+
+
+
+    public void showNoGPSAlert(){
+        Log.d(TAG, "GPS NOT Enabled");
+        Toast toast = Toast.makeText(mContext, "! GPS NOT AVAILABLE !", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        Date date = new Date();
+
+        Log.d(TAG, "startTracking" + "+ onlocation changed time:"+ location.getTime() +" location :"+ location.toString());
+        if (location != null) {
             TrackPoint trackPoint;
-            Log.d(TAG, "startTracking" + "++ startLogging() time:"+ GpsPosition.getTime() +" location :"+ GpsPosition.toString());
-            trackPoint = new TrackPoint(sharedPref.getString("sessionID",null),GpsPosition.getTime(),date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
+            trackPoint = new TrackPoint(sharedPref.getString("sessionID",null),location.getTime(),date,location.getLatitude(),location.getLongitude(),location.getAltitude(),location.getAccuracy());
             trackPoint.setBat((int) getBatteryLevel());
             trackPoint.setNetworkStrength(getNetworkstrength());
             trackPoint.setComment(extraComment);
             Log.d(TAG, " GPSTracking : " + trackPoint.toString());
-            long rowinserted=add2DB(trackPoint);
 
+            long rowinserted=add2DB(trackPoint);
 
             if(rowinserted>0){
                 Log.d(TAG, " row added : " + rowinserted);
@@ -142,64 +182,9 @@ public class LocationService extends Service implements LocationListener{
                 Log.d(TAG, " row NOT added : " + rowinserted);
             }
 
-
         } else {
             Log.d(TAG, " GPSTracking : NULL " );
         }
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.d(TAG, "startLogging" + " onBind ");
-        return null;
-    }
-
-
-    public Location getLocation() {
-        try {
-            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
-
-            // Getting GPS status
-            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            if (!isGPSEnabled) {
-                showNoGPSAlert(); // Network manager : http://stackoverflow.com/questions/3145089/what-is-the-simplest-and-most-robust-way-to-get-the-users-current-location-on-a/3145655#3145655
-            } else {
-                this.canGetLocation = true;
-
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
-
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                    } else {
-                        location=null;
-                    }
-                }
-
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return location;
-    }
-
-
-
-    public void showNoGPSAlert(){
-        Log.d(TAG, "GPS NOT Enabled");
-        Toast toast = Toast.makeText(mContext, "! GPS NOT AVAILABLE !", Toast.LENGTH_LONG);
-        toast.show();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d(TAG, "startTracking" + "++ onlocation changed time:"+ location.getTime() +" location :"+ location.toString());
     }
 
     @Override
@@ -214,7 +199,7 @@ public class LocationService extends Service implements LocationListener{
 
     @Override
     public void onProviderDisabled(String s) {
-
+        showNoGPSAlert();
     }
 
     public float getBatteryLevel() {

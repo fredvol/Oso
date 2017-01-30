@@ -14,6 +14,8 @@ import java.util.List;
 import fr.kriket.oso.R;
 import fr.kriket.oso.model.Track;
 
+import static fr.kriket.oso.tools.Timetools.formatSeconds;
+
 /**
  * Created by fred on 1/7/17.
  */
@@ -58,10 +60,11 @@ public class TracksLoader extends ArrayAdapter<Track> {
 
         //populated field
 
-        viewHolder.NB.setText(String.valueOf(track.getLength()));
+        viewHolder.NB.setText(track.getNbSent()+" / "+track.getLength());
         viewHolder.SessionID.setText(track.getsessionID());
-        viewHolder.StartDate.setText(formatdNow.format(track.getFirstDate()));
-        viewHolder.EndDate.setText(formatdNow.format(track.getLastDate()));
+        viewHolder.StartDate.setText(formatdNow.format(track.getLastDate()));
+        viewHolder.EndDate.setText(formatSeconds(track.getDuration()));
+        //viewHolder.StartDate.setText(formatdNow.format(track.getFirstDate()));
 
 
         // color if today

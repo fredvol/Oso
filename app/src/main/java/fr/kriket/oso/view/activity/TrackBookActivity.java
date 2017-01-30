@@ -143,6 +143,7 @@ private List<Track> alltracks= new ArrayList<>();
                     Toast toast = Toast.makeText(mcontext,"Ooops , An error occur!",Toast.LENGTH_SHORT);
                     toast.show();
                 }
+                refreshData();
                 return true;
 
             case R.id.lg_clik_export_igc:

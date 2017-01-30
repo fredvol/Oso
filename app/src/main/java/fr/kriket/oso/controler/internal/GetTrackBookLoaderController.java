@@ -64,7 +64,7 @@ public class GetTrackBookLoaderController  {
 
         List listTrackPoint = new ArrayList<>();
         while(cursor.moveToNext()) {
-            Log.d(TAG,"cursor"+cursor.toString());
+           // Log.d(TAG,"cursor"+cursor.toString());
 
             long RowId = cursor.getLong(0);
             String UserId= null;
@@ -84,7 +84,7 @@ public class GetTrackBookLoaderController  {
             Date date = new Date(timeStamp);
 
             TrackPoint trackPoint = new TrackPoint (RowId, UserId, SessionId,date,timeStamp,Lati,Long,Alt,Bat,Acc,NetworkStrength,Comment,isSent);
-            Log.d(TAG,"trackPoint"+trackPoint.toString());
+          //  Log.d(TAG,"trackPoint"+trackPoint.toString());
             listTrackPoint.add(trackPoint);
         }
         cursor.close();
