@@ -15,6 +15,7 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.telephony.CellInfo;
@@ -42,6 +43,7 @@ import fr.kriket.oso.loader.external.sendTrackPointLoader;
 import fr.kriket.oso.loader.internal.GetTrackPointFromDBLoader;
 import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
+import fr.kriket.oso.view.activity.MainActivity;
 
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_ACC;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_ALT;
@@ -130,6 +132,7 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     }
 
 
+
     @Override
     public void onGetTrackPointFromDBLoaderSucess(List s) {
         Log.d(TAG, "onGGetTrackPointFromDBLoaderSucess: " + s);
@@ -198,7 +201,7 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
             return false;
         }
 
-
-
     }
+
+
 }

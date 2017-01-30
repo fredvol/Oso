@@ -31,6 +31,7 @@ public class TrackDetailActivity extends AppCompatActivity {
 
     TextView txtview_distCurvi;
     TextView txtview_distLinear;
+    TextView textView_LogInterval;
 
     Track track;
 
@@ -66,6 +67,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         txtview_startDate.setText(formatDate.format(track.getFirstDate()));
         txtview_endDate.setText(formatDate.format(track.getLastDate()));
         txtview_duration.setText(formatSeconds(track.getDuration()));
+        textView_LogInterval.setText(String.valueOf(track.getLogInterval()/1000)+ " min");
         txtview_sessionID.setText(track.getsessionID());
         txtview_distLinear.setText(String.valueOf(formatter.format(GpsTools.distLineTrack(track)/1000)));
         txtview_distCurvi.setText(String.valueOf(formatter.format(GpsTools.distCurviTrack(track)/1000)));
@@ -117,6 +119,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         txtview_sessionID= (TextView) findViewById(R.id.textView_sessionId);
         txtview_distCurvi= (TextView) findViewById(R.id.textView_dist);
         txtview_distLinear= (TextView) findViewById(R.id.textView_dist_lin);
+        textView_LogInterval=(TextView) findViewById(R.id.textView_LogInterval);
 
     }
 

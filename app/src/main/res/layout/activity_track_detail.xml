@@ -100,6 +100,23 @@
                 android:layout_height="match_parent" >
 
                 <TextView
+                    android:text="Log interval: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView_lb_LogInterval" />
+
+                <TextView
+                    android:text="15 min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView_LogInterval" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
                     android:text="SessionId:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

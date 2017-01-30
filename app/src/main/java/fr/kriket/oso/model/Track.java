@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 
 /**
@@ -63,7 +64,9 @@ public class Track implements Serializable {
         return count;
     }
 
-
+    public long getLogInterval(){
+        return  (this.getDuration()/this.getLength())/60;
+    }
 
     public long getDuration() {
         return  this.trackPoints.get(this.trackPoints.size()-1).getTimeStamp()-this.trackPoints.get(0).getTimeStamp();
@@ -79,7 +82,6 @@ public class Track implements Serializable {
 
     public boolean isActive(Context mContex) {
 
-      // return  (mContex.getSharedPreferences("OSO_PREFS",Context.MODE_PRIVATE).getString("SessionId","").equals(this.getsessionID()));
        return  (PreferenceManager.getDefaultSharedPreferences(mContex).getString("sessionID","").equals(this.getsessionID()));
     }
 }

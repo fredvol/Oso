@@ -11,32 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fr.kriket.oso.view.activity.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Oso App !"
-        android:id="@+id/textView2" />
-
-    <TextView
-        android:text="Logging : "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/toggleBtn_log"
-        android:layout_marginBottom="12dp"
-        android:id="@+id/textView_log"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <ToggleButton
-        android:text="Tracking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:id="@+id/toggleBtn_log"
-        android:checked="false"
-        android:enabled="true"
-        android:layout_below="@+id/txtView_About"
-        android:layout_toEndOf="@+id/textView2" />
-
     <Button
         android:text="Mark Point"
         android:layout_width="wrap_content"
@@ -93,5 +67,25 @@
         android:layout_alignTop="@+id/toggleBtn_track"
         android:layout_toStartOf="@+id/imageBttn_share"
         android:id="@+id/button_send_track" />
+
+    <TextView
+        android:text="Logging : "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_log"
+        android:layout_alignBaseline="@+id/toggleBtn_log"
+        android:layout_alignBottom="@+id/toggleBtn_log"
+        android:layout_alignParentStart="true" />
+
+    <ToggleButton
+        android:text="Tracking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/toggleBtn_log"
+        android:checked="false"
+        android:enabled="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/toggleBtn_track" />
 
 </RelativeLayout>

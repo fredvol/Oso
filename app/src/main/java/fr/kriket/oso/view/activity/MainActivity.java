@@ -358,8 +358,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     private void startAlarmManager_TRACK() {
         startAlarmManager_LOG();
         if (isLogAlarmUp()) { //Check is the looging is on
@@ -378,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("trackingID", null).apply();
         Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         StartCancelRepeatingAlarm_TRACK(this,false,sharedPref.getInt("Tracking_interval",10));
+        cancelAlarmManager_LOG();
         updateUI();
     }
 
