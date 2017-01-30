@@ -75,7 +75,8 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editText_track_link"
         android:editable="false"
-        android:enabled="false" />
+        android:focusable="false"
+        android:gravity="right|center_vertical" />
 
     <ImageButton
         android:layout_width="wrap_content"

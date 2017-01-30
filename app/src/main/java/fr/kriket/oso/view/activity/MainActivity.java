@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -22,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -123,23 +125,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        editText_track_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "click on adresse");
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(editText_track_link.getText().toString())));
+            }
+        });
 
 
         // Update the buton log and notification
-        updateLogState();
-        updateTrackState();
-        updateTrackLinkState();
+        updateUI();
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        updateUI();
+    }
+
+    public void updateUI() {
         updateLogState();
         updateTrackState();
         updateTrackLinkState();
     }
-
     public void updateLogState() {
         if (isLogAlarmUp()) {
             Log.d(TAG, "Alarm Log is already active");
@@ -170,12 +179,18 @@ public class MainActivity extends AppCompatActivity {
     public void updateTrackLinkState() {
         if (isTrackAlarmUp()) {
             if (sharedPref.getString("trackingID", null) != null) {
-                editText_track_link.setText( sharedPref.getString("sessionID", null)); // to add sharedPref.getString("serverURl_viewtrack", null)
+                editText_track_link.setText(sharedPref.getString("serverURl_viewtrack", null)+sharedPref.getString("sessionID", null)); // to add sharedPref.getString("serverURl_viewtrack", null);
+                //editText_track_link.setClickable(true);
+                editText_track_link.setEnabled(true);
             } else {
                 editText_track_link.setText("Waiting for tracking ID ...");
+                //editText_track_link.setClickable(false);
+                editText_track_link.setEnabled(false);
             }
         } else {
             editText_track_link.setText("Tracking not active");
+            //editText_track_link.setClickable(false);
+            editText_track_link.setEnabled(false);
         }
     }
 
@@ -300,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void startAlarmManager_LOG () {
+    private void startAlarmManager_LOG() {
 
         Log.d(TAG, "startAlarmManager_LOG interval :" + sharedPref.getInt("log_interval", 3));
 
@@ -320,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
     //        SystemClock.elapsedRealtime(),
     //        intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
     //        pendingIntent);
-
+        updateUI();
         showNotif();
     }
 
@@ -338,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
 //        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 //        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 //        alarmManager.cancel(pendingIntent);
-
+        updateUI();
         cancelNotif();
     }
 
@@ -346,6 +361,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void startAlarmManager_TRACK() {
+        startAlarmManager_LOG();
         if (isLogAlarmUp()) { //Check is the looging is on
             Log.d(TAG, "startAlarmManager_track interval: "+sharedPref.getInt("Tracking_interval",10));
             Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
@@ -354,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "startAlarmManager_track Logging is not active , ABORT ");
             Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_LONG).show();
         }
-        updateTrackState();
+        updateUI();
     }
 
     private void cancelAlarmManager_TRACK() {
@@ -362,6 +378,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("trackingID", null).apply();
         Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         StartCancelRepeatingAlarm_TRACK(this,false,sharedPref.getInt("Tracking_interval",10));
+        updateUI();
     }
 
     static void StartCancelRepeatingAlarm_LOG(Context context, boolean creating, int Interval) {
