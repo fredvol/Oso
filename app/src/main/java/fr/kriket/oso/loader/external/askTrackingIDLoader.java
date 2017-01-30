@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.util.List;
+
 import fr.kriket.oso.controler.external.askTrackingIDControler;
 
 /**
@@ -13,13 +15,16 @@ import fr.kriket.oso.controler.external.askTrackingIDControler;
 public class askTrackingIDLoader  extends AsyncTask<String, Void, Boolean> {
     private static final String TAG = "askTrackingIDLoader";
 
-        private Context mContext;
+
+    private Context mContext;
 
         private askTrackingIDControler mController;
+
 
         public askTrackingIDLoader(Context context) {
             mContext = context;
             mController = askTrackingIDControler.getInstance();
+
             Log.d(TAG,"init");
         }
 
@@ -28,7 +33,7 @@ public class askTrackingIDLoader  extends AsyncTask<String, Void, Boolean> {
             // TODO: 1/22/17 Send user name
             Log.d(TAG,"do in back ground");
             return mController.asktrackinID(mContext);
-
         }
+
     }
 
