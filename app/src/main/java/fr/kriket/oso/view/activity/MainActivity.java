@@ -447,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private static char rndChar () {
+    private static char rndChar () { // TODO: 1/24/17 move to tools package
         int rnd = (int) (Math.random() * 52); // or use Random or whatever
         char base = (rnd < 26) ? 'A' : 'a';
         return (char) (base + rnd % 26);
@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
      * @return Integer between min and max, inclusive.
      * @see java.util.Random#nextInt(int)
      */
-    public static int randInt(int min, int max) {
+    public static int randInt(int min, int max) {   // TODO: 1/24/17  move to tools package
 
         // Usually this can be a field rather than a method variable
         Random rand = new Random();

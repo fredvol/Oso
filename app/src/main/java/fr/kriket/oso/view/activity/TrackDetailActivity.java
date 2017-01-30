@@ -60,15 +60,13 @@ public class TrackDetailActivity extends AppCompatActivity {
 
         NumberFormat formatter = new DecimalFormat("0.000");
 
-
         txtview_nbPoints.setText(track.getNbSent()+"/"+track.getLength());
         txtview_startDate.setText(formatDate.format(track.getFirstDate()));
         txtview_endDate.setText(formatDate.format(track.getLastDate()));
         txtview_duration.setText(formatSeconds(track.getDuration()));
         txtview_sessionID.setText(track.getsessionID());
-        txtview_distLinear.setText( String.valueOf(formatter.format(GpsTools.distLineTrack(track)/1000)));
+        txtview_distLinear.setText(String.valueOf(formatter.format(GpsTools.distLineTrack(track)/1000)));
         txtview_distCurvi.setText(String.valueOf(formatter.format(GpsTools.distCurviTrack(track)/1000)));
-
     }
 
 

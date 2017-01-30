@@ -120,7 +120,8 @@ public class LocationService extends Service implements LocationListener{
         Location GpsPosition = getLocation();
         if (GpsPosition != null) {
             TrackPoint trackPoint;
-            trackPoint = new TrackPoint(sharedPref.getString("sessionID",null),mtimestamp,date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
+            Log.d(TAG, "startTracking" + "++ startLogging() time:"+ GpsPosition.getTime() +" location :"+ GpsPosition.toString());
+            trackPoint = new TrackPoint(sharedPref.getString("sessionID",null),GpsPosition.getTime(),date,GpsPosition.getLatitude(),GpsPosition.getLongitude(),GpsPosition.getAltitude(),GpsPosition.getAccuracy());
             trackPoint.setBat((int) getBatteryLevel());
             trackPoint.setNetworkStrength(getNetworkstrength());
             trackPoint.setComment(extraComment);
@@ -198,7 +199,7 @@ public class LocationService extends Service implements LocationListener{
 
     @Override
     public void onLocationChanged(Location location) {
-      //  Log.d(TAG, "startTracking" + " onlocation changed "+ location.toString());
+        Log.d(TAG, "startTracking" + "++ onlocation changed time:"+ location.getTime() +" location :"+ location.toString());
     }
 
     @Override
