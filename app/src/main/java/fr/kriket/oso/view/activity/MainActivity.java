@@ -10,6 +10,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -42,7 +45,6 @@ import fr.kriket.oso.service.TrackService;
 
 // TODO: 1/21/17 set in the manifest all view as portrait
 
-// TODO: 1/9/17  check if location is ON
 // TODO: 1/12/17 pause tracking
 
 
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private SharedPreferences sharedPref ;
     SharedPreferences.Editor editor;
+
+    protected LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +218,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Test if the net work is avalable ( wifi or Data mobile)
+     * @return bollean
+     */
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     public void toggleLogclick(View v){
 
         if(toggle_log.isChecked()) {
@@ -316,25 +331,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void startAlarmManager_LOG() {
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.d(TAG, "startAlarmManager_LOG interval :" + sharedPref.getInt("log_interval", 3));
 
-        Log.d(TAG, "startAlarmManager_LOG interval :" + sharedPref.getInt("log_interval", 3));
+            // Store Idsession
+            editor.putString("sessionID", generatedSessionId()).apply();
 
-        // Store Idsession
-        editor.putString("sessionID", generatedSessionId()).apply();
+            StartCancelRepeatingAlarm_LOG(this, true, sharedPref.getInt("log_interval", 3));
+        } else {
+            // display asking to enable GPS
+            android.support.v7.app.AlertDialog.Builder builder;
+            builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("GPS ?")
+                    .setMessage(" GPS Not enable!  \n \n  Please active  it ...")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-        StartCancelRepeatingAlarm_LOG(this, true, sharedPref.getInt("log_interval", 3));
+                        }
 
-        // Set up the alarm
+                    })
+                    .show();
 
-    //        Context context = getBaseContext();
-    //        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-    //        gpsTrackerIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
-    //        pendingIntent = PendingIntent.getBroadcast(context, 0, gpsTrackerIntent, 0);
-    //
-    //        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-    //        SystemClock.elapsedRealtime(),
-    //        intervalInMinutes * 60000, // 60000 = 1 minute   // TODO: 1/5/17 Find a way to be down 60s
-    //        pendingIntent);
+        }
+
         updateUI();
         showNotif();
     }
@@ -359,14 +381,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void startAlarmManager_TRACK() {
-        startAlarmManager_LOG();
-        if (isLogAlarmUp()) { //Check is the looging is on
-            Log.d(TAG, "startAlarmManager_track interval: "+sharedPref.getInt("Tracking_interval",10));
-            Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
-            StartCancelRepeatingAlarm_TRACK(this,true,sharedPref.getInt("Tracking_interval",10));
+        if (isNetworkAvailable()) {
+            startAlarmManager_LOG();
+            if (isLogAlarmUp()) { //Check is the looging is on
+                Log.d(TAG, "startAlarmManager_track interval: " + sharedPref.getInt("Tracking_interval", 10));
+                Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+                StartCancelRepeatingAlarm_TRACK(this, true, sharedPref.getInt("Tracking_interval", 10));
+            } else {
+                Log.d(TAG, "startAlarmManager_track Logging is not active , ABORT ");
+                Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_LONG).show();
+            }
+
         } else {
-            Log.d(TAG, "startAlarmManager_track Logging is not active , ABORT ");
-            Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_LONG).show();
+            // display asking to enable data connexion
+            android.support.v7.app.AlertDialog.Builder builder;
+            builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Data Connexion ?")
+                    .setMessage(" No data connexion!  \n \n  Please enable them ...")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+
+                    })
+                    .show();
         }
         updateUI();
     }
@@ -404,7 +444,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (creating) {
             // Store Idsession
-
             alarmManagerTrack.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), Interval * 60000, timerAlarmIntentTrack);
         } else {
             timerAlarmIntentTrack.cancel();
