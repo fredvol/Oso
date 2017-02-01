@@ -42,12 +42,17 @@ import fr.kriket.oso.controler.internal.TrackAlarmReceiver;
 import fr.kriket.oso.service.LocationService;
 import fr.kriket.oso.service.TrackService;
 
+import static fr.kriket.oso.tools.random.randInt;
+import static fr.kriket.oso.tools.random.rndChar;
 
-// TODO: 1/21/17 set in the manifest all view as portrait
+
+// TODO: 2/1/17 find a way to change the intervals ( log & send) during the tracking
 
 // TODO: 1/12/17 pause tracking
 
-
+/**
+ * Note : for the moment the app is using the SessionID as Tracking ID ( it request a tracking ID but it useless)
+ */
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,17 +60,27 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
 
+
     ToggleButton toggle_log;
+
     ToggleButton toggle_track;
+
     Button bttn_mark_pt;
+
     Button bttn_send_pt;
+
     EditText editText_track_link;
+
     ImageButton imageBttn_share;
 
 
+
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+
+    // SHared preference management
     private SharedPreferences sharedPref ;
     SharedPreferences.Editor editor;
+
 
     protected LocationManager locationManager;
 
@@ -84,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         findViewsById();
-       // About();
+
         //Format title bar
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("OSO");
@@ -138,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // Update the buton log and notification
+        // Update the User interface
         updateUI();
     }
 
@@ -148,11 +163,19 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
+
     public void updateUI() {
         updateLogState();
         updateTrackState();
         updateTrackLinkState();
     }
+
+
+    /**
+     * Update log state.
+     * Update the toggle button state and the notification in task bar, if the log alarm is running
+     * if th alarm is not running it also remove the sessionID just in case.
+     */
     public void updateLogState() {
         if (isLogAlarmUp()) {
             Log.d(TAG, "Alarm Log is already active");
@@ -169,6 +192,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update track state.
+     * Like Update log state with Track alarm and track button
+     */
+    // TODO: 2/1/17 add the tracking state in the notification
     public void updateTrackState() {
         if (isTrackAlarmUp()) {
             Log.d(TAG, "Alarm  Track is already active");
@@ -179,6 +207,13 @@ public class MainActivity extends AppCompatActivity {
             toggle_track.setChecked(false);
         }
     }
+
+    /**
+     * Update track link state.
+     * update the edit text with the Url  to see the tracking
+     */
+    // TODO: 2/1/17  Update the fields with the app get the tracking ID
+
 
     public void updateTrackLinkState() {
         if (isTrackAlarmUp()) {
@@ -199,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     public Boolean isLogAlarmUp() {
         Intent alertIntent = new Intent(this, GpsTrackerAlarmReceiver.class);
         return (PendingIntent.getBroadcast(this, 100, alertIntent, PendingIntent.FLAG_NO_CREATE)!=null);
@@ -208,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
         Intent alertIntentTrack = new Intent(this, TrackAlarmReceiver.class);
         return (PendingIntent.getBroadcast(this, 101, alertIntentTrack, PendingIntent.FLAG_NO_CREATE)!=null);
     }
+
 
     public Boolean checkLocationPermission(){
         return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
@@ -219,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Test if the net work is avalable ( wifi or Data mobile)
+     * Test if the net work is available ( wifi or Data mobile)
      * @return bollean
      */
     private boolean isNetworkAvailable() {
@@ -228,6 +265,8 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
 
     public void toggleLogclick(View v){
 
@@ -248,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public void toggleTrackclick(View v){
 
         if(toggle_track.isChecked()) {
@@ -257,10 +297,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Mark point.
+     * Call the Location Service to add a point.
+     * Ask if the user want to add a optional comment
+     */
     public void mark_Point() {
         Log.d(TAG, "markPoint");
 
-        if (!isLogAlarmUp()) {
+        if (!isLogAlarmUp()) {                // if the user was not in tracking but want to add a single point
             Log.d(TAG, "!isalarmUp()");
             editor.putString("sessionID", generatedSessionId()).apply();
         }
@@ -314,15 +359,20 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
     public void lauchMarkPointIntent(String mextracomment){
         // Created the intent
         Intent intentlocat=new Intent(this, LocationService.class);
 
-        intentlocat.putExtra("isMarkPoint",true);
+        intentlocat.putExtra("isMarkPoint",true);    // Boolen to display a Toast when the mark point is added
         intentlocat.putExtra("extraComment",mextracomment);
         this.startService(intentlocat);
     }
 
+    /**
+     * Send point.
+     * Call the Track Service to force to send points.
+     */
     public void send_Point(){
         // Created the intent
         Intent intentsend=new Intent(this, TrackService.class);
@@ -330,6 +380,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /** Start of the LOGGING
+     */
     private void startAlarmManager_LOG() {
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -362,6 +414,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /*** Stop the LOGGING
+     */
     private void cancelAlarmManager_LOG() {
         Log.d(TAG, "cancelAlarmManager_log");
 
@@ -379,7 +433,8 @@ public class MainActivity extends AppCompatActivity {
         cancelNotif();
     }
 
-
+    /** Start of the TRACKING
+     */
     private void startAlarmManager_TRACK() {
         if (isNetworkAvailable()) {
             startAlarmManager_LOG();
@@ -411,15 +466,27 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
+    /*** Stop the TRACKING
+     */
     private void cancelAlarmManager_TRACK() {
         Log.d(TAG, "cancelAlarmManager_track");
+
+        cancelAlarmManager_LOG();
+        send_Point(); //send the last points
         editor.putString("trackingID", null).apply();
         Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         StartCancelRepeatingAlarm_TRACK(this,false,sharedPref.getInt("Tracking_interval",10));
-        cancelAlarmManager_LOG();
+
         updateUI();
     }
 
+    /**
+     * Start cancel repeating alarm log.
+     *
+     * @param context  the context
+     * @param creating Bool creating ( or cancel)
+     * @param Interval the interval in minute
+     */
     static void StartCancelRepeatingAlarm_LOG(Context context, boolean creating, int Interval) {
         //if it already exists, then replace it with this one
         Intent alertIntent = new Intent(context, GpsTrackerAlarmReceiver.class);
@@ -435,6 +502,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Start cancel repeating alarm track.
+     *
+     * @param context  the context
+     * @param creating Bool creating ( or cancel)
+     * @param Interval the interval in minute
+     */
     static void StartCancelRepeatingAlarm_TRACK(Context context, boolean creating, int Interval) {
         //if it already exists, then replace it with this one
         Intent alertIntentTrack = new Intent(context, TrackAlarmReceiver.class);
@@ -452,8 +526,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //// Notifcation
+    /**
+     * The notif management.
+     */
+//// Notifcation
     int mNotifID=1;    // Notification ID
+
     private void showNotif() {
         // Display Notification
         NotificationCompat.Builder mBuilder =
@@ -482,6 +560,9 @@ public class MainActivity extends AppCompatActivity {
         mNotificationManager.cancel(mNotifID);
     }
 
+    /**
+     * Sharetrack id.
+     */
     public void sharetrackID(){
         Intent intentShareText = new Intent(); intentShareText.setAction(Intent.ACTION_SEND);
         intentShareText.setType("text/plain");
@@ -490,6 +571,10 @@ public class MainActivity extends AppCompatActivity {
  }
 
 
+    /**
+     * Generated an ID for the session
+     * @return a string  from aa000aa to ZZ999ZZ
+     */
     private String generatedSessionId(){
 
      return  String.valueOf(rndChar())+
@@ -499,38 +584,13 @@ public class MainActivity extends AppCompatActivity {
              String.valueOf(randInt(0,9))+
              String.valueOf(rndChar())+
              String.valueOf(rndChar());
-
     }
 
-    private static char rndChar () { // TODO: 1/24/17 move to tools package
-        int rnd = (int) (Math.random() * 52); // or use Random or whatever
-        char base = (rnd < 26) ? 'A' : 'a';
-        return (char) (base + rnd % 26);
 
-    }
 
     /**
-     * Returns a psuedo-random number between min and max, inclusive.
-     * The difference between min and max can be at most
-     * <code>Integer.MAX_VALUE - 1</code>.
-
-     * @param min Minimim value
-     * @param max Maximim value.  Must be greater than min.
-     * @return Integer between min and max, inclusive.
-     * @see java.util.Random#nextInt(int)
+     * Activity layout initialisation
      */
-    public static int randInt(int min, int max) {   // TODO: 1/24/17  move to tools package
-
-        // Usually this can be a field rather than a method variable
-        Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-
-        return rand.nextInt((max - min) + 1) + min;
-    }
-
-    /// Initialisation
     private void findViewsById() {
 
         //Create Toggle

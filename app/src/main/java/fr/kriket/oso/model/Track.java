@@ -65,13 +65,12 @@ public class Track implements Serializable {
     }
 
     public long getLogInterval(){
-        return  (this.getDuration()/this.getLength())/60;
+        return  Math.round((this.getDuration()/this.getLength())/60);
     }
 
     public long getDuration() {
         return  this.trackPoints.get(this.trackPoints.size()-1).getTimeStamp()-this.trackPoints.get(0).getTimeStamp();
     }
-
 
     public boolean isValid() {
         if(this.trackPoints.size()==0) return false;
