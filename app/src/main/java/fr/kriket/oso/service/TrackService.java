@@ -62,7 +62,7 @@ import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TIMESTAMP;
  * Created by fred on 1/3/17.
  */
 
-public class TrackService extends Service implements GetTrackPointFromDBLoader.GetTrackPointFromDBLoaderListener ,sendTrackPointLoader.sendTrackPointLoaderListener{
+public class TrackService extends Service implements GetTrackPointFromDBLoader.GetTrackPointFromDBLoaderListener ,sendTrackPointLoader.sendTrackPointLoaderListener,askTrackingIDLoader.askTrackingIDLoaderListener {
 
     private static final String TAG = "TrackService";
 
@@ -71,13 +71,13 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     private SharedPreferences sharedPref ;
 
 
+
     // Intent
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Log.d(TAG, "------------------ \n startTracking" + " onStartCommand ");
+        Log.d(TAG, "---------->>>>> \n startTracking" + " onStartCommand ");
 
         startTracking();
         return START_NOT_STICKY;
@@ -91,19 +91,14 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss Z");
         Log.d(TAG, "startTracking" + " Time: " + dateFormat.format(date));
 
-        if(hasTrackingID()){
-            Log.d(TAG, " trackingID OK: " + sharedPref.getString("sessionID",null));
+        if(hasTrackingID() ){
+            Log.d(TAG, " trackingID (seesionID) OK: " + sharedPref.getString("sessionID",null));
+            Log.d(TAG, " real trackingID : " + sharedPref.getString("trackingID",null));
             startProcedureSending();
         } else {
             Log.d(TAG, " trackingID NO");
-            askTrackingIDLoader askTrackingIDLoader = new askTrackingIDLoader(this);
+            askTrackingIDLoader askTrackingIDLoader = new askTrackingIDLoader(this, this);
             askTrackingIDLoader.execute();
-
-            if (hasTrackingID()){
-                startProcedureSending();
-            }
-
-
         }
     }
 
@@ -113,7 +108,8 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     public void startProcedureSending(){  //maybe useless
         Log.d(TAG, " sendpoint");
-        selectTrackpoint2send(sharedPref.getString("sessionID",""));
+
+            selectTrackpoint2send(sharedPref.getString("sessionID",""));
     }
 
     public void selectTrackpoint2send(String sessionId){
@@ -159,7 +155,6 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
         if(results.size()>0){
             updateIsSent2DB(results);
         }
-
     }
 
     @Override
@@ -204,4 +199,18 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     }
 
 
+    @Override
+    public void onGetTrackingIDSucess() {
+        Log.d(TAG, " onGetTrackingIDSucess");
+        startProcedureSending();
+
+    }
+
+    @Override
+    public void onGetTrackingIDFailed() {
+        Log.d(TAG, " onGetTrackingIDFailed");
+        Toast toast = Toast.makeText(mContext, "! No Tracking ID.", Toast.LENGTH_LONG);
+        toast.show();
+
+    }
 }

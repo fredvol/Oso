@@ -26,15 +26,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import java.util.Random;
 
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
@@ -123,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         bttn_mark_pt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mark_Point();
+                mark_Point(true);
 
             }
         });
@@ -302,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
      * Call the Location Service to add a point.
      * Ask if the user want to add a optional comment
      */
-    public void mark_Point() {
+    public void mark_Point(Boolean withcomment) {
         Log.d(TAG, "markPoint");
 
         if (!isLogAlarmUp()) {                // if the user was not in tracking but want to add a single point
@@ -315,48 +312,50 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("sessionID", generatedSessionId()).apply();
         }
 
-        // Ask for comment
-        LayoutInflater li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.prompt_markpoint_comment, null);
+        if (withcomment) {
+            // Ask for comment
+            LayoutInflater li = LayoutInflater.from(this);
+            View promptsView = li.inflate(R.layout.prompt_markpoint_comment, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
+            // set prompts.xml to alertdialog builder
+            alertDialogBuilder.setView(promptsView);
 
-        final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
+            final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
 
-        // set dialog message
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("Send",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // get user input and set it to result
-                                // edit text
-                                if(userInput.getText().toString().length()>0){
-                                    lauchMarkPointIntent(userInput.getText().toString());
-                                }else{
-                                    lauchMarkPointIntent(null);
+            // set dialog message
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("Send",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // get user input and set it to result
+                                    // edit text
+                                    if(userInput.getText().toString().length()>0){
+                                        lauchMarkPointIntent(userInput.getText().toString());
+                                    }else{
+                                        lauchMarkPointIntent(null);
+                                    }
                                 }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
 
+                                    dialog.cancel();
+                                }
+                            });
 
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+            // show it
+            alertDialog.show();
+        } else {
+            lauchMarkPointIntent(null);
+        }
 
-                                dialog.cancel();
-                            }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
     }
 
 
@@ -391,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("sessionID", generatedSessionId()).apply();
 
             StartCancelRepeatingAlarm_LOG(this, true, sharedPref.getInt("log_interval", 3));
+            mark_Point(false);
         } else {
             // display asking to enable GPS
             android.support.v7.app.AlertDialog.Builder builder;
@@ -403,10 +403,8 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
-
                     })
                     .show();
-
         }
 
         updateUI();
@@ -470,9 +468,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void cancelAlarmManager_TRACK() {
         Log.d(TAG, "cancelAlarmManager_track");
-
+        //send_Point(); //send the last points   sharedPref.getString("sessionID", null)
         cancelAlarmManager_LOG();
-        send_Point(); //send the last points
         editor.putString("trackingID", null).apply();
         Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();
         StartCancelRepeatingAlarm_TRACK(this,false,sharedPref.getInt("Tracking_interval",10));

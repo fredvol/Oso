@@ -20,9 +20,7 @@ public class GetTrackPointFromDBLoader extends AsyncTask<String, Void, List> {
     public interface GetTrackPointFromDBLoaderListener {
 
         void onGetTrackPointFromDBLoaderSucess(List s);
-
         void onGetTrackPointFromDBLoaderFailed(String s);
-
     }
 
 
