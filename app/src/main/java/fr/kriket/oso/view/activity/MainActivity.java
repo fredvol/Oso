@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity  {
     private SharedPreferences sharedPref ;
     SharedPreferences.Editor editor;
 
-    private BroadcastReceiver updateUIReciver;
+    private BroadcastReceiver updateUIReceiver;
 
 
     protected LocationManager locationManager;
@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity  {
         findViewsById();
 
 
-        /////////////////////////////////
+        // Broadcast receiver from  track service.GetTrakingID  ( to update UI)
         IntentFilter filter = new IntentFilter();
 
         filter.addAction(ACTION_RECEIVE_TRACKINGID);
 
-        updateUIReciver = new BroadcastReceiver() {
+        updateUIReceiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         };
-        registerReceiver(updateUIReciver,filter);
+        registerReceiver(updateUIReceiver,filter);
 
 
         //Format title bar
