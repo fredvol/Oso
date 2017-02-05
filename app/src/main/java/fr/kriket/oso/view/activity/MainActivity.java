@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity  {
 
         // Broadcast receiver from  track service.GetTrakingID  ( to update UI)
         IntentFilter filter = new IntentFilter();
-
         filter.addAction(ACTION_RECEIVE_TRACKINGID);
 
         updateUIReceiver = new BroadcastReceiver() {
@@ -235,7 +234,6 @@ public class MainActivity extends AppCompatActivity  {
      * Update track link state.
      * update the edit text with the Url  to see the tracking
      */
-    // TODO: 2/1/17  Update the fields with the app get the tracking ID
 
 
     public void updateTrackLinkState() {
