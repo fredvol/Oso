@@ -34,7 +34,6 @@ public class askTrackingIDLoader extends AsyncTask<String, Void, Boolean> {
         mContext = context;
         mController = askTrackingIDControler.getInstance();
         mListener = listener;
-
     }
 
     @Override
@@ -50,7 +49,6 @@ public class askTrackingIDLoader extends AsyncTask<String, Void, Boolean> {
         } else {
             mListener.onGetTrackingIDFailed();
         }
-
     }
 
 }

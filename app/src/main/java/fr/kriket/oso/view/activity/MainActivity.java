@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateTrackLinkState() {
         if (isTrackAlarmUp()) {
             if (sharedPref.getString("trackingID", null) != null) {
-                editText_track_link.setText(sharedPref.getString("serverURl_viewtrack", null)+sharedPref.getString("sessionID", null)); // to add sharedPref.getString("serverURl_viewtrack", null);
+                editText_track_link.setText(sharedPref.getString("serverURl_viewtrack", null)+sharedPref.getString("trackingID", null)); // to add sharedPref.getString("serverURl_viewtrack", null);    sharedPref.getString("trackingID",null)
                 //editText_track_link.setClickable(true);
                 editText_track_link.setEnabled(true);
             } else {
@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
     public void sharetrackID(){
         Intent intentShareText = new Intent(); intentShareText.setAction(Intent.ACTION_SEND);
         intentShareText.setType("text/plain");
-        intentShareText.putExtra(Intent.EXTRA_TEXT, sharedPref.getString("msg_followme","")+": "+sharedPref.getString("serverURl_viewtrack","")+sharedPref.getString("sessionID","Not avalaible")); // TODO: 1/22/17  change session id to tracking ID 
+        intentShareText.putExtra(Intent.EXTRA_TEXT, sharedPref.getString("msg_followme","")+": "+sharedPref.getString("serverURl_viewtrack","")+sharedPref.getString("trackingID","Not avalaible"));
         startActivity(Intent.createChooser(intentShareText, "Share via"));
  }
 

@@ -38,8 +38,6 @@ public class sendTrackPointLoader  extends AsyncTask<List<TrackPoint>, Void, Lis
             }
 
             List<TrackPoint> trackPoints = params[0];
-
-
             List<String> result;
 
             result = mController.SendTrackPoints(mContext,trackPoints);
