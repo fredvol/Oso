@@ -57,6 +57,7 @@ import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_NETWORKSTRE
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_SESSIONID;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TABLE_NAME;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TIMESTAMP;
+import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TRACKINGID;
 
 
 /**
@@ -175,14 +176,16 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     }
 
     public boolean updateIsSent2DB(List<String> listTimestamp) {
-
-        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, 1);
-
+        final  int VERSION = 2;
         final String TRACKPT_TABLE_NAME = "TrackPointTable";
+
+        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, VERSION); // TODO: 2/5/17  call uniform method
+
 
         // Gets the data repository in write mode
         ContentValues cv = new ContentValues();
         cv.put(TRACKPT_ISSENT,1);
+        cv.put(TRACKPT_TRACKINGID,sharedPref.getString("trackingID",null));
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         
@@ -213,16 +216,11 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     @Override
     public void onGetTrackingIDSucess() {
-
-
         Log.d(TAG, " onGetTrackingIDSucess");
-
         Intent intent = new Intent(GETID_RESULT);
         this.sendBroadcast(intent);
 
-
         startProcedureSending();
-
 
     }
 

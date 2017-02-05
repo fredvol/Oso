@@ -28,6 +28,7 @@ public class TrackDetailActivity extends AppCompatActivity {
     TextView txtview_endDate;
     TextView txtview_duration;
     TextView txtview_sessionID;
+    TextView textView_TrackingId;
 
     TextView txtview_distCurvi;
     TextView txtview_distLinear;
@@ -69,43 +70,12 @@ public class TrackDetailActivity extends AppCompatActivity {
         txtview_duration.setText(formatSeconds(track.getDuration()));
         textView_LogInterval.setText(String.valueOf(track.getLogInterval()/1000)+ " min");
         txtview_sessionID.setText(track.getsessionID());
+        textView_TrackingId.setText(track.getTrackingID());
         txtview_distLinear.setText(String.valueOf(formatter.format(GpsTools.distLineTrack(track)/1000)));
         txtview_distCurvi.setText(String.valueOf(formatter.format(GpsTools.distCurviTrack(track)/1000)));
     }
 
 
-//    /**
-//     * Format seconds string.
-//     *
-//     * To be changed.
-//     *
-//     * @param timeInMiliSeconds the time in miliseconds
-//     * @return the string
-//     */
-//    public static String formatSeconds(long timeInMiliSeconds)
-//    {
-//        long timeInSeconds=timeInMiliSeconds/1000;
-//
-//        long hours = timeInSeconds / 3600;
-//        long secondsLeft = timeInSeconds - hours * 3600;
-//        long minutes = secondsLeft / 60;
-//        long seconds = secondsLeft - minutes * 60;
-//
-//        String formattedTime = "";
-//        if (hours < 10)
-//            formattedTime += "0";
-//        formattedTime += hours + ":";
-//
-//        if (minutes < 10)
-//            formattedTime += "0";
-//        formattedTime += minutes + ":";
-//
-//        if (seconds < 10)
-//            formattedTime += "0";
-//        formattedTime += seconds ;
-//
-//        return formattedTime;
-//    }
 
     /// Initialisation
     private void findViewsById() {
@@ -117,6 +87,7 @@ public class TrackDetailActivity extends AppCompatActivity {
         txtview_endDate= (TextView) findViewById(R.id.textView_endDate);
         txtview_duration = (TextView) findViewById(R.id.textView_duration);
         txtview_sessionID= (TextView) findViewById(R.id.textView_sessionId);
+        textView_TrackingId= (TextView) findViewById(R.id.textView_TrackingId);
         txtview_distCurvi= (TextView) findViewById(R.id.textView_dist);
         txtview_distLinear= (TextView) findViewById(R.id.textView_dist_lin);
         textView_LogInterval=(TextView) findViewById(R.id.textView_LogInterval);

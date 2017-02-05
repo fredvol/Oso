@@ -144,7 +144,7 @@
                     android:text="not available"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_sessionId" />
+                    android:id="@+id/textView_TrackingId" />
             </TableRow>
 
             <TableRow

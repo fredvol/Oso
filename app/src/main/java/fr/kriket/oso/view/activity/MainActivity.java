@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
 
-        //Other share pref
+        //Share pref
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         //editor
         editor = sharedPref.edit();
@@ -481,7 +481,6 @@ public class MainActivity extends AppCompatActivity  {
                         public void onClick(DialogInterface dialog, int which) {
 
                         }
-
                     })
                     .show();
         }

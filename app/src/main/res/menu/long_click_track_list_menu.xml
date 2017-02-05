@@ -5,6 +5,9 @@
     <item android:id="@+id/lg_clik_track_view"
         android:title="View Track details"
         app:showAsAction="never"/>
+    <item android:id="@+id/lg_clik_track_view_online"
+        android:title="View Track online"
+        app:showAsAction="never"/>
     <item android:id="@+id/lg_clik_track_delete"
         android:title="Delete Track"
         app:showAsAction="never"/>

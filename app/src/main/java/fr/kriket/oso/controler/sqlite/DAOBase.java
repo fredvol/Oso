@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by fred on 1/1/17.
  */
 
-public abstract class DAOBase {
+public  class DAOBase {
 
     // Database version
-
-    protected final static int VERSION = 1;
+    // version 2 added the TrackingID column
+    protected final static int VERSION = 2;
 
     // File Name
     protected final static String NOM = "database.db";

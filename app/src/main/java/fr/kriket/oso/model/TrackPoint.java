@@ -11,7 +11,7 @@ import java.util.Date;
 public class TrackPoint implements Serializable {
 
     private long RowId;
-    private String UserId;
+
     private String TrackingId;
     private String SessionId;
     private Date DatePrise;
@@ -29,10 +29,11 @@ public class TrackPoint implements Serializable {
     // CONSTRUCTOR
 
 
-    public TrackPoint(long rowId, String userId, String sessionId, Date datePrise, long timeStamp, double lati, double aLong, double alt, int bat,float acc, int networkStrength, String comment, boolean isSent) {
+    public TrackPoint(long rowId,  String sessionId,String trackingId, Date datePrise, long timeStamp, double lati, double aLong, double alt, int bat,float acc, int networkStrength, String comment, boolean isSent) {
         RowId = rowId;
-        UserId = userId;
+
         SessionId = sessionId;
+        TrackingId=trackingId;
         DatePrise = datePrise;
         TimeStamp = timeStamp;
         Lati = lati;
@@ -72,13 +73,6 @@ public class TrackPoint implements Serializable {
 
     public void setSessionId(String sessionId) {SessionId = sessionId;}
 
-    public String getUserId() {
-        return UserId;
-    }
-
-    public void setUserId(String userId) {
-        UserId = userId;
-    }
 
     public boolean isSent() {
         return isSent;
@@ -172,8 +166,8 @@ public class TrackPoint implements Serializable {
     public String toString() {
         return "TrackPoint{" +
                 "RowId=" + RowId +
-                ", UserId='" + UserId + '\'' +
                 ", SessionId='" + SessionId + '\'' +
+                ", TrackingId='" + TrackingId + '\'' +
                 ", DatePrise=" + DatePrise +
                 ", TimeStamp=" + TimeStamp +
                 ", Lati=" + Lati +

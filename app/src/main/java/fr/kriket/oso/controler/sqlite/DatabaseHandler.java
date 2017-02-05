@@ -3,6 +3,7 @@ package fr.kriket.oso.controler.sqlite;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by fred on 1/1/17.
@@ -13,6 +14,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String TRACKPT_KEY = "id";
     public static final String TRACKPT_SESSIONID = "SessionId";
+    public static final String TRACKPT_TRACKINGID = "TrackingId";
     public static final String TRACKPT_TIMESTAMP = "TimeStamp";
     public static final String TRACKPT_LAT = "Lat";
     public static final String TRACKPT_LONG = "Long";
@@ -32,6 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
                     TRACKPT_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TRACKPT_SESSIONID +" TEXT,"+
+                    TRACKPT_TRACKINGID +" TEXT,"+
                     TRACKPT_TIMESTAMP +" INTEGER,"+
                     TRACKPT_LAT+" REAL,"+
                     TRACKPT_LONG+" REAL,"+
@@ -54,7 +57,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Log.d("DatabaseHandler", " onUpgrade");
+        if(newVersion > oldVersion){
+
+            String sql = "drop table if exists " + TRACKPT_TABLE_NAME;
+            sqLiteDatabase.execSQL(sql);
+
+            onCreate(sqLiteDatabase);
+        }
+
     }
 
 

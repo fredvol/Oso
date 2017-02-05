@@ -54,6 +54,16 @@ public class Track implements Serializable {
         return  this.trackPoints.get(this.trackPoints.size()-1).getDate();
     }
 
+    public String getTrackingID(){
+
+        for (TrackPoint Tpt : this.trackPoints  ){
+            if(Tpt.getTrackingId()!=null){
+                return Tpt.getTrackingId();
+            }
+        }
+        return null;
+    }
+
     public long getNbSent(){
         long count = 0;
         for (TrackPoint Tpt : this.trackPoints  ){
@@ -72,12 +82,7 @@ public class Track implements Serializable {
         return  this.trackPoints.get(this.trackPoints.size()-1).getTimeStamp()-this.trackPoints.get(0).getTimeStamp();
     }
 
-    public boolean isValid() {
-        if(this.trackPoints.size()==0) return false;
-        if (this.getsessionID()== null) return false;
 
-        return true;
-    }
 
     public boolean isActive(Context mContex) {
 

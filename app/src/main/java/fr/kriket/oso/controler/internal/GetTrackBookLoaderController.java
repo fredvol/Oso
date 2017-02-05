@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.kriket.oso.controler.sqlite.DAOBase;
 import fr.kriket.oso.controler.sqlite.DatabaseHandler;
 import fr.kriket.oso.model.TrackPoint;
 
@@ -47,11 +48,13 @@ public class GetTrackBookLoaderController  {
      */
     public List getPointsBySeesionId(Context mcontext, String sessionID) {
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,1);
+        final  int VERSION = 2;
+        final String TRACKPT_TABLE_NAME = "TrackPointTable"; // TODO: 2/5/17  Need to be group somewhere
 
-        final String TRACKPT_TABLE_NAME = "TrackPointTable";
+        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,VERSION);  //TODO: 2/5/17  call uniform method
 
-        // Gets the data repository in write mode
+
+                // Gets the data repository in write mode
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String strSQL="select * from " + TRACKPT_TABLE_NAME;
@@ -62,28 +65,28 @@ public class GetTrackBookLoaderController  {
 
         Cursor cursor = db.rawQuery(strSQL , null);
 
-        List listTrackPoint = new ArrayList<>();
+        List listTrackPoint = new ArrayList<>();                        // TODO: 2/5/17  need to find a way to not be depend of the colums number
         while(cursor.moveToNext()) {
            // Log.d(TAG,"cursor"+cursor.toString());
 
             long RowId = cursor.getLong(0);
             String UserId= null;
             String SessionId= cursor.getString(1);
+            String TrackingId= cursor.getString(2);
+            long timeStamp= cursor.getLong(3);
+            double Lati = cursor.getDouble(4);
+            double Long = cursor.getDouble(5);
+            double Alt = cursor.getDouble(6);
+            int Bat = cursor.getInt(7);
+            float Acc = cursor.getInt(8);
+            int NetworkStrength = cursor.getInt(9);
 
-            long timeStamp= cursor.getLong(2);
-            double Lati = cursor.getDouble(3);
-            double Long = cursor.getDouble(4);
-            double Alt = cursor.getDouble(5);
-            int Bat = cursor.getInt(6);
-            float Acc = cursor.getInt(7);
-            int NetworkStrength = cursor.getInt(8);
-
-            String Comment= cursor.getString(9);
-            boolean isSent= cursor.getInt(10)> 0;
+            String Comment= cursor.getString(10);
+            boolean isSent= cursor.getInt(11)> 0;
 
             Date date = new Date(timeStamp);
 
-            TrackPoint trackPoint = new TrackPoint (RowId, UserId, SessionId,date,timeStamp,Lati,Long,Alt,Bat,Acc,NetworkStrength,Comment,isSent);
+            TrackPoint trackPoint = new TrackPoint (RowId, SessionId,TrackingId,date,timeStamp,Lati,Long,Alt,Bat,Acc,NetworkStrength,Comment,isSent);
           //  Log.d(TAG,"trackPoint"+trackPoint.toString());
             listTrackPoint.add(trackPoint);
         }

@@ -2,8 +2,11 @@ package fr.kriket.oso.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +50,7 @@ public class TrackBookActivity extends AppCompatActivity implements GetTrackBook
 
     ListView mListView;
     Context mcontext =this;
+    private SharedPreferences sharedPref ;
 
 private List<Track> alltracks= new ArrayList<>();
 
@@ -59,6 +63,7 @@ private List<Track> alltracks= new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_book);
 
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         findViewsById();
 
@@ -76,28 +81,20 @@ private List<Track> alltracks= new ArrayList<>();
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.i(TAG, "Click");
-                String stringTrack;
-
-                stringTrack= alltracks.get(position).getsessionID();
-
-                Track track=alltracks.get(position);
-                // Start activity modif
-
-
-                Log.i(TAG, "Track Selected: "+stringTrack);
-
-
-
-                Intent StartTrackDetailActivite = new Intent(mcontext, TrackDetailActivity.class);
-                StartTrackDetailActivite.putExtra("Track", (Serializable) track);
-                startActivity(StartTrackDetailActivite);
-
-
+                openTrackDetails(position);
             }
 
         });
 
+    }
+
+    public  void openTrackDetails(int position){
+
+        Track track=alltracks.get(position);
+
+        Intent StartTrackDetailActivite = new Intent(mcontext, TrackDetailActivity.class);
+        StartTrackDetailActivite.putExtra("Track", (Serializable) track);
+        startActivity(StartTrackDetailActivite);
     }
 
     @Override
@@ -129,9 +126,21 @@ private List<Track> alltracks= new ArrayList<>();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.lg_clik_track_view:
-                Log.d(TAG,"after menu : view" );
-//                // add stuff here
+                Log.d(TAG,"after menu : view" );   // like click
+               openTrackDetails(info.position);
                 return true;
+
+            case R.id.lg_clik_track_view_online:   // open web browser to see the track online
+                Log.d(TAG,"after menu : view online" );
+                if (alltracks.get(info.position).getTrackingID() != null) {
+
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(sharedPref.getString("serverURl_viewtrack","")+alltracks.get(info.position).getTrackingID())));
+                } else {
+                    Toast toast = Toast.makeText(mcontext,"Tracking ID not available !",Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                return true;
+
             case R.id.lg_clik_track_delete:
                 Log.d(TAG,"after menu : delete" );
 
@@ -175,22 +184,18 @@ private List<Track> alltracks= new ArrayList<>();
         db.close();
 
         return isdelete;
-
     }
-
 
 
     private void refreshData() {
         GetTrackBookLoader loader = new GetTrackBookLoader(this, this);
         loader.execute();
-
     }
 
     /// Initialisation
     private void findViewsById() {
         //Create Listview
         mListView = (ListView) findViewById(R.id.listview_trackbook);
-
     }
 
 
@@ -200,7 +205,6 @@ private List<Track> alltracks= new ArrayList<>();
             case android.R.id.home :
                 finish();
                 return true;
-
         }
         return false;
     }
@@ -265,7 +269,6 @@ private List<Track> alltracks= new ArrayList<>();
             List<TrackPoint> mtrackPoints=new ArrayList<>();
 
             for (TrackPoint trackPoint: trackPoints) {
-                //Log.d(TAG,"trck2point mId="+mID +" tracpt.sessID="+trackPoint.getSessionId());
 
                 if (trackPoint.isValid() && mID != null) {
                     try {
