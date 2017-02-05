@@ -12,6 +12,7 @@ public class TrackPoint implements Serializable {
 
     private long RowId;
     private String UserId;
+    private String TrackingId;
     private String SessionId;
     private Date DatePrise;
     private long TimeStamp;
@@ -154,6 +155,10 @@ public class TrackPoint implements Serializable {
     public void setDatePrise(Date datePrise) {
         DatePrise = datePrise;
     }
+
+    public String getTrackingId() { return TrackingId; }
+
+    public void setTrackingId(String trackingId) { TrackingId = trackingId;    }
 
     // Method
     public boolean isValid() {

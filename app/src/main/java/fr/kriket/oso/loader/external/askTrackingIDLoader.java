@@ -13,6 +13,8 @@ import fr.kriket.oso.loader.internal.GetTrackPointFromDBLoader;
  * Created by fred on 1/22/17.
  */
 
+// TODO: 2/5/17  use broadcast  to update UI
+
 public class askTrackingIDLoader extends AsyncTask<String, Void, Boolean> {
     private static final String TAG = "askTrackingIDLoader";
 
@@ -33,13 +35,11 @@ public class askTrackingIDLoader extends AsyncTask<String, Void, Boolean> {
         mController = askTrackingIDControler.getInstance();
         mListener = listener;
 
-        Log.d(TAG, "init");
     }
 
     @Override
     protected Boolean doInBackground(String... params) {
         // TODO: 1/22/17 Send user name
-        Log.d(TAG, "do in back ground");
         return mController.asktrackinID(mContext);
     }
 

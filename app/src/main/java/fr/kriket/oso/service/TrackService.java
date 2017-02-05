@@ -67,7 +67,6 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     private static final String TAG = "TrackService";
 
     private final Context mContext = this;
-
     private SharedPreferences sharedPref ;
 
 
@@ -135,8 +134,17 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
         if(s.size()>0){
             Log.d(TAG, "s.size()>0  Sending ...");
+
+            // add trackingID before sending
+            List<TrackPoint> trackPoints =s;
+
+            for (TrackPoint trackPoint : trackPoints) {
+               trackPoint.setTrackingId(sharedPref.getString("trackingID",null));
+            }
+
+            // send the trackpoints
             sendTrackPointLoader sendTrackPointLoader = new sendTrackPointLoader(this, this);
-            sendTrackPointLoader.execute(s);
+            sendTrackPointLoader.execute(trackPoints);
         } else {
             Log.d(TAG, "No points to send");
         }
@@ -173,10 +181,8 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
         ContentValues cv = new ContentValues();
         cv.put(TRACKPT_ISSENT,1);
 
-
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-
+        
         List<Long> modifiedRow= new ArrayList<>();
 
         for(String s : listTimestamp) {
@@ -187,7 +193,8 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
             }
         }
         db.close();
-                Log.d(TAG, "updateIsSent2DB" + modifiedRow);
+
+        Log.d(TAG, "updateIsSent2DB" + modifiedRow);
         if(modifiedRow.size()==listTimestamp.size()){
                      return true;
         } else {
