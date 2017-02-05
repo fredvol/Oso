@@ -5,9 +5,11 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -52,7 +54,7 @@ import static fr.kriket.oso.tools.random.rndChar;
  */
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private static final String TAG = "MainActivity";
 
@@ -73,10 +75,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    // Reveiced broad cast
+    private final String ACTION_RECEIVE_TRACKINGID = "fr.kriket.oso.view.activity.MainActivity.TRACKID_RECEIVED";
 
     // SHared preference management
     private SharedPreferences sharedPref ;
     SharedPreferences.Editor editor;
+
+    private BroadcastReceiver updateUIReciver;
 
 
     protected LocationManager locationManager;
@@ -96,6 +102,24 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         findViewsById();
+
+
+        /////////////////////////////////
+        IntentFilter filter = new IntentFilter();
+
+        filter.addAction(ACTION_RECEIVE_TRACKINGID);
+
+        updateUIReciver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "onReceive Broadcast  get Track ID  so update UI");
+                updateUI();
+
+            }
+        };
+        registerReceiver(updateUIReciver,filter);
+
 
         //Format title bar
         assert getSupportActionBar() != null;
@@ -153,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
         // Update the User interface
         updateUI();
     }
+
+
 
     @Override
     public void onResume(){
@@ -638,4 +664,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }

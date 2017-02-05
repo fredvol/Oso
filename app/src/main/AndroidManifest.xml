@@ -23,6 +23,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="fr.kriket.oso.view.activity.MainActivity.TRACKID_RECEIVED" />
+            </intent-filter>
 
         </activity>
         <activity android:name=".view.activity.RecAccdata" />

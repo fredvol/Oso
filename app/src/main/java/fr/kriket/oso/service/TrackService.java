@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
@@ -71,12 +72,14 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
 
 
+
     // Intent
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d(TAG, "---------->>>>> \n startTracking" + " onStartCommand ");
+
 
         startTracking();
         return START_NOT_STICKY;
@@ -205,11 +208,21 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
 
     }
 
+    static final public String GETID_RESULT = "fr.kriket.oso.view.activity.MainActivity.TRACKID_RECEIVED";
+
 
     @Override
     public void onGetTrackingIDSucess() {
+
+
         Log.d(TAG, " onGetTrackingIDSucess");
+
+        Intent intent = new Intent(GETID_RESULT);
+        this.sendBroadcast(intent);
+
+
         startProcedureSending();
+
 
     }
 
