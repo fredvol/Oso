@@ -173,7 +173,7 @@ private List<Track> alltracks= new ArrayList<>();
     private boolean deleteTrackinDB(String sessionID){
         Log.d(TAG,"Delete session IS : "+sessionID );
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,1);
+        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,2);
 
 
         final String TRACKPT_TABLE_NAME = "TrackPointTable";

@@ -105,19 +105,20 @@ public class MainActivity extends AppCompatActivity  {
 
 
         // Broadcast receiver from  track service.GetTrakingID  ( to update UI)
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_RECEIVE_TRACKINGID);
-
-        updateUIReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "onReceive Broadcast  get Track ID  so update UI");
-                updateUI();
-
-            }
-        };
-        registerReceiver(updateUIReceiver,filter);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(ACTION_RECEIVE_TRACKINGID);
+//
+        setUpdateUIReceiver();
+//        updateUIReceiver = new BroadcastReceiver() {
+//
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                Log.d(TAG, "onReceive Broadcast  get Track ID  so update UI");
+//                updateUI();
+//
+//            }
+//        };
+//        registerReceiver(updateUIReceiver,filter);
 
 
         //Format title bar
@@ -182,8 +183,42 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onResume(){
         super.onResume();
+        setUpdateUIReceiver();
+
         updateUI();
     }
+
+    public void setUpdateUIReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_RECEIVE_TRACKINGID);
+        updateUIReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "onReceive Broadcast  get Track ID  so update UI");
+                updateUI();
+
+            }
+        };
+        registerReceiver(updateUIReceiver,filter);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if (updateUIReceiver!=null) {     // TODO: 2/7/17  need to be check more , nut sure is working
+            Log.d(TAG, "unregisterReceiver(updateUIReceiver)");
+
+            try {
+                unregisterReceiver(updateUIReceiver);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            updateUIReceiver=null;
+        }
+    }
+
+    // TODO: 2/7/17
 
 
     public void updateUI() {
@@ -351,7 +386,7 @@ public class MainActivity extends AppCompatActivity  {
             // set dialog message
             alertDialogBuilder
                     .setCancelable(false)
-                    .setPositiveButton("Send",
+                    .setPositiveButton("Save",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // get user input and set it to result
@@ -399,6 +434,8 @@ public class MainActivity extends AppCompatActivity  {
     public void send_Point(){
         // Created the intent
         Intent intentsend=new Intent(this, TrackService.class);
+
+        intentsend.putExtra("imposeTrackingID", sharedPref.getString("sessionID", null));
         this.startService(intentsend);
     }
 
@@ -430,7 +467,6 @@ public class MainActivity extends AppCompatActivity  {
                     })
                     .show();
         }
-
         updateUI();
         showNotif();
     }
@@ -491,7 +527,7 @@ public class MainActivity extends AppCompatActivity  {
      */
     private void cancelAlarmManager_TRACK() {
         Log.d(TAG, "cancelAlarmManager_track");
-        //send_Point(); //send the last points   sharedPref.getString("sessionID", null)
+        send_Point(); //send the last points   sharedPref.getString("sessionID", null)
         cancelAlarmManager_LOG();
         editor.putString("trackingID", null).apply();
         Toast.makeText(MainActivity.this, "End Tracking", Toast.LENGTH_SHORT).show();

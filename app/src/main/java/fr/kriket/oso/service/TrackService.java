@@ -72,47 +72,57 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     private SharedPreferences sharedPref ;
 
 
-
-
     // Intent
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        String imposeTrackingID =null;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d(TAG, "---------->>>>> \n startTracking" + " onStartCommand ");
+        if (intent.hasExtra("imposeTrackingID")) {
+            imposeTrackingID=intent.getExtras().getString("imposeTrackingID");//intent.getStringExtra("imposeTrackingID");
+
+        }
 
 
-        startTracking();
+
+        startTracking(imposeTrackingID);
         return START_NOT_STICKY;
     }
 
 
 
     // START TRACKING
-    private void startTracking() {
+    private void startTracking(String imposeSessionID) {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss Z");
         Log.d(TAG, "startTracking" + " Time: " + dateFormat.format(date));
 
-        if(hasTrackingID() ){
-            Log.d(TAG, " trackingID (seesionID) OK: " + sharedPref.getString("sessionID",null));
-            Log.d(TAG, " real trackingID : " + sharedPref.getString("trackingID",null));
-            startProcedureSending();
-        } else {
-            Log.d(TAG, " trackingID NO");
-            askTrackingIDLoader askTrackingIDLoader = new askTrackingIDLoader(this, this);
-            askTrackingIDLoader.execute();
-        }
+            if (hasTrackingID()) {
+                Log.d(TAG, " trackingID (seesionID) OK: " + sharedPref.getString("sessionID", null));
+                Log.d(TAG, " real trackingID : " + sharedPref.getString("trackingID", null));
+
+                if (imposeSessionID != null) {
+                    startProcedureSending(imposeSessionID);
+                } else {
+                    startProcedureSending(sharedPref.getString("sessionID", ""));
+                }
+
+            } else {
+                Log.d(TAG, " trackingID NO");
+                askTrackingIDLoader askTrackingIDLoader = new askTrackingIDLoader(this, this);
+                askTrackingIDLoader.execute();
+            }
+
     }
 
     public boolean hasTrackingID(){
         return  sharedPref.getString("trackingID",null) != null;
     }
 
-    public void startProcedureSending(){  //maybe useless
+    public void startProcedureSending(String SessionID){  //maybe useless
         Log.d(TAG, " sendpoint");
 
-            selectTrackpoint2send(sharedPref.getString("sessionID",""));
+            selectTrackpoint2send(SessionID);
     }
 
     public void selectTrackpoint2send(String sessionId){
@@ -220,7 +230,7 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
         Intent intent = new Intent(GETID_RESULT);
         this.sendBroadcast(intent);
 
-        startProcedureSending();
+        startProcedureSending(sharedPref.getString("trackingID",null));
 
     }
 
