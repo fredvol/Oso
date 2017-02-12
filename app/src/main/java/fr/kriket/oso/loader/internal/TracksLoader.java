@@ -47,7 +47,7 @@ public class TracksLoader extends ArrayAdapter<Track> {
         if (viewHolder == null) {
             viewHolder = new TracksLoaderHolder();
             viewHolder.NB = (TextView) convertView.findViewById(R.id.txtView_NB);
-            viewHolder.SessionID = (TextView) convertView.findViewById(R.id.txtView_SessionId);
+            viewHolder.TrackingID = (TextView) convertView.findViewById(R.id.txtView_TrackingId);
             viewHolder.StartDate = (TextView) convertView.findViewById(R.id.txtView_StartDate);
             viewHolder.EndDate = (TextView) convertView.findViewById(R.id.txtView_EndDate);
 
@@ -61,7 +61,7 @@ public class TracksLoader extends ArrayAdapter<Track> {
         //populated field
 
         viewHolder.NB.setText(track.getNbSent()+" / "+track.getLength());
-        viewHolder.SessionID.setText(track.getsessionID());
+        viewHolder.TrackingID.setText(track.getTrackingID());
         viewHolder.StartDate.setText(formatdNow.format(track.getLastDate()));
         viewHolder.EndDate.setText(formatSeconds(track.getDuration()));
         //viewHolder.StartDate.setText(formatdNow.format(track.getFirstDate()));
@@ -79,7 +79,7 @@ public class TracksLoader extends ArrayAdapter<Track> {
 
     private class TracksLoaderHolder {
         public TextView NB;
-        public TextView SessionID;
+        public TextView TrackingID;
         public TextView StartDate;
         public TextView EndDate;
 

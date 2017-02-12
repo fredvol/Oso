@@ -11,7 +11,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,6 +37,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.kriket.oso.R;
 import fr.kriket.oso.controler.internal.GpsTrackerAlarmReceiver;
 import fr.kriket.oso.controler.internal.TrackAlarmReceiver;
@@ -50,7 +55,7 @@ import static fr.kriket.oso.tools.random.rndChar;
 // TODO: 1/12/17 pause tracking
 
 /**
- * Note : for the moment the app is using the SessionID as Tracking ID ( it request a tracking ID but it useless)
+ * Note : for the moment the app is using the TrackingID as Tracking ID ( it request a tracking ID but it useless)
  */
 
 
@@ -144,9 +149,7 @@ public class MainActivity extends AppCompatActivity  {
         bttn_mark_pt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mark_Point(true);
-
-            }
+                mark_Point(true); }
         });
 
 //        bttn_send_pt.setOnClickListener(new View.OnClickListener() {
@@ -160,19 +163,17 @@ public class MainActivity extends AppCompatActivity  {
         imageBttn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharetrackID();
-                  }
+                sharetrackID(); }
         });
 
 
         editText_track_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "click on adresse");
+                Log.d(TAG, "Click on adresse");
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(sharedPref.getString("serverURl_viewtrack", null)+sharedPref.getString("trackingID", null))));
             }
         });
-
 
         // Update the User interface
         updateUI();
@@ -205,20 +206,22 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     public void onPause(){
+
         super.onPause();
-        if (updateUIReceiver!=null) {     // TODO: 2/7/17  need to be check more , nut sure is working
-            Log.d(TAG, "unregisterReceiver(updateUIReceiver)");
+        if (updateUIReceiver!=null) {
+            Log.d(TAG, "unregisterReceiver(onpause): "+ updateUIReceiver);
 
             try {
                 unregisterReceiver(updateUIReceiver);
+                Log.d(TAG, "unregisterReceiver(onpause) after try: "+ updateUIReceiver);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            updateUIReceiver=null;
+        // TODO: 2/12/17  need to unregister  for    //android.intent.action.MAIN
+
         }
     }
 
-    // TODO: 2/7/17
 
 
     public void updateUI() {
@@ -422,7 +425,7 @@ public class MainActivity extends AppCompatActivity  {
         // Created the intent
         Intent intentlocat=new Intent(this, LocationService.class);
 
-        intentlocat.putExtra("isMarkPoint",true);    // Boolen to display a Toast when the mark point is added
+        intentlocat.putExtra("isMarkPoint",true);    // Boolean to display a Toast when the mark point is added
         intentlocat.putExtra("extraComment",mextracomment);
         this.startService(intentlocat);
     }
@@ -462,7 +465,6 @@ public class MainActivity extends AppCompatActivity  {
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                         }
                     })
                     .show();

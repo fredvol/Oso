@@ -44,14 +44,14 @@
         android:layout_alignParentEnd="true" />
 
 
-    <!-- SessionID -->
+    <!-- TrackingID -->
     <TextView
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="SessionId"
-        android:id="@+id/txtView_SessionId"
+        android:id="@+id/txtView_TrackingId"
         android:maxLines="2"
         android:ellipsize="end"
         android:layout_marginLeft="10dp"
