@@ -41,7 +41,7 @@
         android:id="@+id/editText_track_link"
         android:editable="false"
         android:focusable="false"
-        android:gravity="right" />
+        android:gravity="end" />
 
     <Button
         android:text="send"

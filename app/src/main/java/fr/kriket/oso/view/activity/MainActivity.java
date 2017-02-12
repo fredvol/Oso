@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity  {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_notif_track_on)
                         .setContentTitle("OSO")
-                        .setContentText("Logging is ON!")
+                        .setContentText("Tracking is ON!")
                         .setAutoCancel(false)
                         .setOngoing(true);
 

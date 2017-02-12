@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -66,9 +67,20 @@ public class sendTrackPointControler {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(mcontext);
         mUrl =sharedPref.getString("serverURl_sendpoints","http://kriket.hd.free.fr:802/oso_web/V1/add.php");
 
-        Log.d(TAG,"SendTrackPoints mUrl: "+mUrl);
+        // Remove date prise as redundant with Timestamp , if value=null Gson ignore them   // TODO: 2/12/17 Cretaed a custon serialiser to Remove RowID, Issent
+        for (TrackPoint trackpoint : trackpoints) {
+            trackpoint.setDatePrise(null);
+        }
+
         String jsonList=new Gson().toJson(trackpoints);  // TODO: 1/22/17 remove Gson lib  ?
-        // TODO: 1/22/17 make a clear difference between sessionID and Track ID !
+
+        Log.d(TAG,"jsonList before: "+jsonList);
+
+
+        String jsonList2=new Gson().toJson(trackpoints);  // TODO: 1/22/17 remove Gson lib  ?
+
+        Log.d(TAG,"jsonList2 after: "+jsonList2);
+
 
         Response response;
 
