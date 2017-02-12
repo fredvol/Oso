@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
 import fr.kriket.oso.R;
+import fr.kriket.oso.service.TrackService;
 import fr.kriket.oso.tools.ExportImportDB;
 
 public class DebugActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class DebugActivity extends AppCompatActivity {
     Button  btn_record_Acc_data;
     Button btn_export_DB;
     Button btn_test;
+    Button bttn_send_pt;
 
 
     Context context;
@@ -88,6 +90,15 @@ public class DebugActivity extends AppCompatActivity {
             }
         });
 
+        // Force send points
+        bttn_send_pt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send_Point();
+
+            }
+        });
+
 
 
 
@@ -120,6 +131,7 @@ public class DebugActivity extends AppCompatActivity {
         btn_record_Acc_data = (Button) findViewById(R.id.btn_rec_acc_data);
         btn_export_DB = (Button) findViewById(R.id.bttn_export_DB);
         btn_test=(Button) findViewById(R.id.button_test);
+        bttn_send_pt=(Button) findViewById(R.id.button_force_send_track);
     }
 
     @Override
@@ -131,6 +143,20 @@ public class DebugActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Send point.
+     * Call the Track Service to force to send points.
+     */
+    public void send_Point(){
+        // Created the intent
+        Intent intentsend=new Intent(this, TrackService.class);
+
+        intentsend.putExtra("imposeTrackingID", sharedPref.getString("sessionID", null));
+        this.startService(intentsend);
+
+        Toast.makeText(this, "Force sending points ...", Toast.LENGTH_SHORT).show();
     }
 
 

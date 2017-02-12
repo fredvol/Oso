@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity  {
 
     Button bttn_mark_pt;
 
-    Button bttn_send_pt;
+    //Button bttn_send_pt;
 
     EditText editText_track_link;
 
@@ -149,13 +149,13 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        bttn_send_pt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                send_Point();
-
-            }
-        });
+//        bttn_send_pt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                send_Point();
+//
+//            }
+//        });
 
         imageBttn_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -654,7 +654,7 @@ public class MainActivity extends AppCompatActivity  {
         toggle_track=(ToggleButton) findViewById(R.id.toggleBtn_track);
         //Create button
         bttn_mark_pt = (Button) findViewById(R.id.bttn_mark_pt);
-        bttn_send_pt=(Button) findViewById(R.id.button_send_track);  //use for debuging
+       // bttn_send_pt=(Button) findViewById(R.id.button_send_track);  //moved to debug page
         //Create Edit text
         editText_track_link= (EditText) findViewById(R.id.editText_track_link);
         //Created image button

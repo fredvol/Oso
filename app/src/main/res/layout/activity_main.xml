@@ -43,15 +43,6 @@
         android:focusable="false"
         android:gravity="end" />
 
-    <Button
-        android:text="send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:layout_alignTop="@+id/toggleBtn_track"
-        android:layout_toStartOf="@+id/imageBttn_share"
-        android:id="@+id/button_send_track" />
-
     <TextView
         android:text="Logging : "
         android:layout_width="wrap_content"
