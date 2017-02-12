@@ -74,13 +74,6 @@ public class sendTrackPointControler {
 
         String jsonList=new Gson().toJson(trackpoints);  // TODO: 1/22/17 remove Gson lib  ?
 
-        Log.d(TAG,"jsonList before: "+jsonList);
-
-
-        String jsonList2=new Gson().toJson(trackpoints);  // TODO: 1/22/17 remove Gson lib  ?
-
-        Log.d(TAG,"jsonList2 after: "+jsonList2);
-
 
         Response response;
 
