@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "click on adresse");
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(editText_track_link.getText().toString())));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(sharedPref.getString("serverURl_viewtrack", null)+sharedPref.getString("trackingID", null))));
             }
         });
 
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity  {
     public void updateTrackLinkState() {
         if (isTrackAlarmUp()) {
             if (sharedPref.getString("trackingID", null) != null) {
-                editText_track_link.setText(sharedPref.getString("serverURl_viewtrack", null)+sharedPref.getString("trackingID", null)); // to add sharedPref.getString("serverURl_viewtrack", null);    sharedPref.getString("trackingID",null)
+                editText_track_link.setText("Tracking ID:  "+ sharedPref.getString("trackingID", null));
                 //editText_track_link.setClickable(true);
                 editText_track_link.setEnabled(true);
             } else {
