@@ -13,7 +13,6 @@ import fr.kriket.oso.loader.internal.GetTrackPointFromDBLoader;
  * Created by fred on 1/22/17.
  */
 
-// TODO: 2/5/17  use broadcast  to update UI
 
 public class askTrackingIDLoader extends AsyncTask<String, Void, Boolean> {
     private static final String TAG = "askTrackingIDLoader";

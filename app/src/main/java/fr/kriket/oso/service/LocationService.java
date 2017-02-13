@@ -253,10 +253,10 @@ public class LocationService extends Service implements LocationListener{
     }
 
     public long add2DB(TrackPoint trackPoint) {
-        final  int VERSION = 2;
-        final String TRACKPT_TABLE_NAME = "TrackPointTable";             // TODO: 2/5/17 to group  somewhere
+       // final  int VERSION = 2;
+       // final String TRACKPT_TABLE_NAME = "TrackPointTable";
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, VERSION);
+        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, DATABASE_VERSION);
 
 
         // Gets the data repository in write mode

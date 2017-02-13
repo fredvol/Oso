@@ -3,17 +3,16 @@ package fr.kriket.oso.controler.internal;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import fr.kriket.oso.controler.sqlite.DAOBase;
+
 import fr.kriket.oso.controler.sqlite.DatabaseHandler;
 import fr.kriket.oso.model.TrackPoint;
 
+import static fr.kriket.oso.controler.sqlite.DatabaseHandler.DATABASE_VERSION;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TABLE_NAME;
 
 /**
@@ -48,10 +47,10 @@ public class GetTrackBookLoaderController  {
      */
     public List getPointsBySeesionId(Context mcontext, String sessionID) {
 
-        final  int VERSION = 2;
-        final String TRACKPT_TABLE_NAME = "TrackPointTable"; // TODO: 2/5/17  Need to be group somewhere
+        //final int VERSION = 2;
+        //final String TRACKPT_TABLE_NAME = "TrackPointTable"; // TODO: 2/5/17  Need to be group somewhere
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,VERSION);  //TODO: 2/5/17  call uniform method
+        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,DATABASE_VERSION);  //TODO: 2/5/17  call uniform method
 
 
                 // Gets the data repository in write mode

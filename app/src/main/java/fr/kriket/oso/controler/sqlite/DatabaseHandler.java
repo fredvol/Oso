@@ -26,8 +26,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String TRACKPT_ISSENT = "isSent";
 
 
-
+    public static final int DATABASE_VERSION = 2;
     public static final String TRACKPT_TABLE_NAME = "TrackPointTable";
+
     public static final String TRACKPT_TABLE_CREATE =
 
             "CREATE TABLE " + TRACKPT_TABLE_NAME + " (" +

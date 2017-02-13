@@ -37,13 +37,13 @@ import fr.kriket.oso.loader.internal.TracksLoader;
 import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 
+import static fr.kriket.oso.controler.sqlite.DatabaseHandler.DATABASE_VERSION;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_TABLE_NAME;
 import static fr.kriket.oso.tools.ExportIGC.generateIGCFile;
 import static fr.kriket.oso.tools.GenerateCsv.generateCsvFile;
 
 public class TrackBookActivity extends AppCompatActivity implements GetTrackBookLoader.GetTrackBookLoaderListener{
 
-    // TODO: 1/21/17 Refresh the list on resume.
 
     private static final String TAG = "TrackBookActivity";
     public static final String TRACKPT_SESSIONID = "SessionId";
@@ -173,10 +173,10 @@ private List<Track> alltracks= new ArrayList<>();
     private boolean deleteTrackinDB(String sessionID){
         Log.d(TAG,"Delete session IS : "+sessionID );
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,2);
+        DatabaseHandler mDbHelper = new DatabaseHandler(mcontext,TRACKPT_TABLE_NAME,null,DATABASE_VERSION);
 
 
-        final String TRACKPT_TABLE_NAME = "TrackPointTable";
+       // final String TRACKPT_TABLE_NAME = "TrackPointTable";
 
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();

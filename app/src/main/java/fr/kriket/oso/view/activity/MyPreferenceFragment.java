@@ -40,7 +40,6 @@ public class MyPreferenceFragment extends PreferenceFragment implements SharedPr
             initSummary(p);
         }
     }
-    // TODO: 1/17/17 Display  value on start
 
 
     private void initSummary(Preference p) {

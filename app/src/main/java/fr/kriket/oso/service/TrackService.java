@@ -46,6 +46,7 @@ import fr.kriket.oso.model.Track;
 import fr.kriket.oso.model.TrackPoint;
 import fr.kriket.oso.view.activity.MainActivity;
 
+import static fr.kriket.oso.controler.sqlite.DatabaseHandler.DATABASE_VERSION;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_ACC;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_ALT;
 import static fr.kriket.oso.controler.sqlite.DatabaseHandler.TRACKPT_BAT;
@@ -186,10 +187,10 @@ public class TrackService extends Service implements GetTrackPointFromDBLoader.G
     }
 
     public boolean updateIsSent2DB(List<String> listTimestamp) {
-        final  int VERSION = 2;
-        final String TRACKPT_TABLE_NAME = "TrackPointTable";
+        //final  int VERSION = 2;
+        //final String TRACKPT_TABLE_NAME = "TrackPointTable";
 
-        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, VERSION); // TODO: 2/5/17  call uniform method
+        DatabaseHandler mDbHelper = new DatabaseHandler(this, TRACKPT_TABLE_NAME, null, DATABASE_VERSION);
 
 
         // Gets the data repository in write mode
