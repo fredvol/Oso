@@ -26,7 +26,7 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:text="Nb Point ( sent/Total):"
+                    android:text="Nb Point (Sent/Total):"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView_Lb_NbPoint"
@@ -36,8 +36,7 @@
                     android:text="123/254"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_nbPoints"
-                    android:layout_weight="1" />
+                    android:id="@+id/textView_nbPoints" />
             </TableRow>
 
             <TableRow
@@ -49,14 +48,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView_lb_dateStart"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="09/01/2017 12:10:04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_StartDate"
-                    android:layout_weight="1" />
+                    android:id="@+id/textView_StartDate" />
             </TableRow>
 
             <TableRow
@@ -67,7 +65,8 @@
                     android:text="End:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_EndDate" />
+                    android:id="@+id/textView_lb_EndDate"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="09/01/2017 14:32:14"
@@ -85,7 +84,8 @@
                     android:text="Duration:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_duration" />
+                    android:id="@+id/textView_lb_duration"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="2h 36 min  15s"
@@ -103,7 +103,8 @@
                     android:text="Log interval: "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_LogInterval" />
+                    android:id="@+id/textView_lb_LogInterval"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="15 min"
@@ -120,7 +121,8 @@
                     android:text="SessionId:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_sessionid" />
+                    android:id="@+id/textView_lb_sessionid"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="aa000aa"
@@ -138,7 +140,8 @@
                     android:text="TrackingId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_trackingid" />
+                    android:id="@+id/textView_lb_trackingid"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="not available"
@@ -155,7 +158,8 @@
                     android:text="Dist start->end (km):"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_dist_lin" />
+                    android:id="@+id/textView_lb_dist_lin"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="52"
@@ -173,7 +177,8 @@
                     android:text="Distance(km):"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView_lb_dist" />
+                    android:id="@+id/textView_lb_dist"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:text="72"
