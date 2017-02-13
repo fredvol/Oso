@@ -1,5 +1,8 @@
 # Oso
 
+[![Code Climate](https://codeclimate.com/github/fredvol/Oso/badges/gpa.svg)](https://codeclimate.com/github/fredvol/Oso)
+[![Issue Count](https://codeclimate.com/github/fredvol/Oso/badges/issue_count.svg)](https://codeclimate.com/github/fredvol/Oso)
+
 This is : a light, anonymous ,amnesic, personal, safety tracking.
 
 The aim is to have an app which :
