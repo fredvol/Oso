@@ -3,9 +3,11 @@ package fr.kriket.oso.view.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ public class AboutActivity extends AppCompatActivity {
 
 
     TextView txtview_about;
+    TextView txtview_Goto_Github;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,14 @@ public class AboutActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("About");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Set listener
+        txtview_Goto_Github.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fredvol/Oso")));
+            }
+        });
 
         About();
     }
@@ -60,6 +71,7 @@ public class AboutActivity extends AppCompatActivity {
 
         //Create Textview
         txtview_about = (TextView) findViewById(R.id.txtView_About);
+        txtview_Goto_Github =(TextView) findViewById(R.id.textView_url_github);
     }
 
     @Override

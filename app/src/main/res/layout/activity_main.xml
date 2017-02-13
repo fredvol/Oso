@@ -79,6 +79,7 @@
         app:srcCompat="?attr/actionModeShareDrawable"
         android:id="@+id/imageBttn_share"
         android:layout_alignTop="@+id/editText_track_link"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:contentDescription="share button" />
 
 </RelativeLayout>

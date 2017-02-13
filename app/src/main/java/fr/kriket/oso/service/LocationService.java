@@ -216,7 +216,7 @@ public class LocationService extends Service implements LocationListener{
 
     public int getNetworkstrength(){
         TelephonyManager telephonyManager;
-        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);;
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
 
         int dBmlevel=0;

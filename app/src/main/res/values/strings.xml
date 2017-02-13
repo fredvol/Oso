@@ -1,19 +1,5 @@
 <resources>
     <string name="app_name">Oso</string>
 
-    <string name="hello">Hello World, PreferenceSimpleTuto!</string>
 
-    <string name="checkbox">Check Box</string>
-    <string name="ringtone">Ring Tone</string>
-    <string name="checkbox2">Check Box2</string>
-    <string name="text">Text</string>
-    <string name="list">List</string>
-    <string-array name="i_like_array">
-        <item>chocolate</item>
-        <item>television</item>
-        <item>internet</item>
-        <item>nicotine</item>
-        <item>hug</item>
-        <item>Santa Claus</item>
-    </string-array>
 </resources>

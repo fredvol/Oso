@@ -2,7 +2,6 @@ package fr.kriket.oso.loader.external;
 
 import android.content.Context;
 import android.os.AsyncTask;
-;
 import java.util.List;
 
 import fr.kriket.oso.controler.external.sendTrackPointControler;

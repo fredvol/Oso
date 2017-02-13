@@ -21,8 +21,25 @@
         android:layout_height="wrap_content"
         android:text="About"
         android:id="@+id/txtView_About"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/textView_url_github"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="More info :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:id="@+id/textView2"
         android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="https://github.com/fredvol/Oso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_url_github"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true" />
 </RelativeLayout>
 
