@@ -11,26 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fr.kriket.oso.view.activity.MainActivity">
 
-    <TextView
-        android:text="Tracking: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_track_label"
-        android:layout_below="@+id/bttn_mark_pt"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="38dp"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-    <ToggleButton
-        android:text="ToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toggleBtn_track"
-        android:layout_alignBaseline="@+id/textView_track_label"
-        android:layout_alignBottom="@+id/textView_track_label"
-        android:layout_toEndOf="@+id/textView_track_label"
-        android:layout_marginStart="24dp" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,33 +24,6 @@
         android:focusable="false"
         android:gravity="end" />
 
-    <TextView
-        android:text="Logging : "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_log"
-        android:layout_alignBaseline="@+id/toggleBtn_log"
-        android:layout_alignBottom="@+id/toggleBtn_log"
-        android:layout_alignParentStart="true" />
-
-    <ToggleButton
-        android:text="Tracking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toggleBtn_log"
-        android:checked="false"
-        android:enabled="true"
-        android:layout_alignStart="@+id/toggleBtn_track" />
-
-    <Button
-        android:text="Mark Point"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bttn_mark_pt"
-        android:layout_alignBaseline="@+id/toggleBtn_log"
-        android:layout_alignBottom="@+id/toggleBtn_log"
-        android:layout_toEndOf="@+id/editText_track_link" />
-
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,5 +32,45 @@
         android:layout_alignTop="@+id/editText_track_link"
         android:layout_alignParentEnd="true"
         android:contentDescription="share button" />
+
+    <TextView
+        android:text="Tracking: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_track_label"
+        android:layout_marginTop="35dp"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:layout_below="@+id/radioBtn_log"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Mark Point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bttn_mark_pt"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/toggleBtn_track"
+        android:layout_marginStart="43dp" />
+
+    <ToggleButton
+        android:text="ToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toggleBtn_track"
+        android:layout_alignBaseline="@+id/textView_track_label"
+        android:layout_alignBottom="@+id/textView_track_label"
+        android:layout_centerHorizontal="true" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioBtn_log"
+        android:text="Recording :"
+        android:layoutDirection="rtl"
+        android:layout_alignBaseline="@+id/bttn_mark_pt"
+        android:layout_alignBottom="@+id/bttn_mark_pt"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/bttn_mark_pt"
+        android:textColor="@android:color/darker_gray" />
 
 </RelativeLayout>
