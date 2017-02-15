@@ -337,15 +337,9 @@ public class MainActivity extends AppCompatActivity  {
 
     public void toggleLogclick(View v){
 
-        if(radioBtn_log.isDirty()) {
+        if(radioBtn_log.isDirty()) {            //Strange  that isChecked is always true and we should use is dirty !
+            startAlarmManager_LOG();
 
-            if (checkLocationPermission()) {    //Strange  that isChecked is always true and we should use is dirty !
-
-                startAlarmManager_LOG();
-                Toast.makeText(MainActivity.this, "Start Logging", Toast.LENGTH_SHORT).show();
-            } else {
-                requestLocationPermission();
-            }
 
         } else {
 
@@ -454,31 +448,39 @@ public class MainActivity extends AppCompatActivity  {
     /** Start of the LOGGING
      */
     private void startAlarmManager_LOG() {
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Log.d(TAG, "startAlarmManager_LOG interval :" + sharedPref.getInt("log_interval", 3));
 
-            // Store Idsession
-            editor.putString("sessionID", generatedSessionId()).apply();
+        if (checkLocationPermission()) {
+            Toast.makeText(MainActivity.this, "Start Logging", Toast.LENGTH_SHORT).show();
 
-            StartCancelRepeatingAlarm_LOG(this, true, sharedPref.getInt("log_interval", 3));
-            mark_Point(false);
+            locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                Log.d(TAG, "startAlarmManager_LOG interval :" + sharedPref.getInt("log_interval", 3));
+
+                // Store Idsession
+                editor.putString("sessionID", generatedSessionId()).apply();
+
+                StartCancelRepeatingAlarm_LOG(this, true, sharedPref.getInt("log_interval", 3));
+                mark_Point(false);
+            } else {
+                // display asking to enable GPS
+                android.support.v7.app.AlertDialog.Builder builder;
+                builder = new android.support.v7.app.AlertDialog.Builder(this);
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("GPS ?")
+                        .setMessage(" GPS Not enable!  \n \n  Please active  it ...")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
+            }
+            updateUI();
+            showNotif();
         } else {
-            // display asking to enable GPS
-            android.support.v7.app.AlertDialog.Builder builder;
-            builder = new android.support.v7.app.AlertDialog.Builder(this);
-            builder.setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("GPS ?")
-                    .setMessage(" GPS Not enable!  \n \n  Please active  it ...")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .show();
+            requestLocationPermission();
         }
-        updateUI();
-        showNotif();
+
     }
 
 
@@ -505,14 +507,18 @@ public class MainActivity extends AppCompatActivity  {
      */
     private void startAlarmManager_TRACK() {
         if (isNetworkAvailable()) {
-            startAlarmManager_LOG();
-            if (isLogAlarmUp()) { //Check is the looging is on
-                Log.d(TAG, "startAlarmManager_track interval: " + sharedPref.getInt("Tracking_interval", 10));
-                Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
-                StartCancelRepeatingAlarm_TRACK(this, true, sharedPref.getInt("Tracking_interval", 10));
+            if (checkLocationPermission()) {
+                startAlarmManager_LOG();
+                if (isLogAlarmUp()) { //Check is the looging is on
+                    Log.d(TAG, "startAlarmManager_track interval: " + sharedPref.getInt("Tracking_interval", 10));
+                    Toast.makeText(MainActivity.this, "Start Tracking", Toast.LENGTH_SHORT).show();
+                    StartCancelRepeatingAlarm_TRACK(this, true, sharedPref.getInt("Tracking_interval", 10));
+                } else {
+                    Log.d(TAG, "startAlarmManager_track Logging is not active , ABORT ");
+                    Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Log.d(TAG, "startAlarmManager_track Logging is not active , ABORT ");
-                Toast.makeText(MainActivity.this, " Logging is not active, tracking impossible !", Toast.LENGTH_LONG).show();
+                requestLocationPermission();
             }
 
         } else {
