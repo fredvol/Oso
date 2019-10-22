@@ -3,6 +3,8 @@
 [![Code Climate](https://codeclimate.com/github/fredvol/Oso/badges/gpa.svg)](https://codeclimate.com/github/fredvol/Oso)
 [![Issue Count](https://codeclimate.com/github/fredvol/Oso/badges/issue_count.svg)](https://codeclimate.com/github/fredvol/Oso)
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 This is : a light, anonymous ,amnesic, personal, safety tracking.
 
 The aim is to have an app which :
