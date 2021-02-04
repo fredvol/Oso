@@ -45,8 +45,6 @@ All data are sent to a server, which is also opensource ( you can install  your 
 ## License:
 Still to be define but should be GPL V3. Anyway something open pushing for code sharing.
 
-**WORK IN SLOW PROGRESS ....** 
-
 *Comments and advises are welcome.*
 
 ## Coding details:
